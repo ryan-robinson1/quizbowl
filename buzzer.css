@@ -23,6 +23,7 @@ body header h2{
 #score{
   float: right; padding-right: 10px;
 }
+
 footer h2{
   font-weight: 900;
   font-size: 40px;
@@ -44,6 +45,12 @@ header{
     font-weight: bolder;
     color: white;
     
+}
+#buzz{
+  background-color: #c60929 !important; 
+  text-align: center;
+  font-size: 80px;
+
 }
 .btn:hover, .btn:focus, .btn:active{
   color:white;
