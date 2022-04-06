@@ -43,17 +43,17 @@ class Controller
     }
     public function quizzes()
     {
-        // $error_msg = "";
+        $error_msg = "";
 
-        // $qset;
+        $qset;
 
-        // $sets_list = $this->db->query("select set_id, set_name from project_questionSet where user_email = ?;", "s", $_SESSION["email"]);
+        $sets_list = $this->db->query("select set_id, set_name from project_questionSet where username = ?;", "s", $_SESSION["user"]);
 
-        // if ($sets_list === false) {
-        //     $error_msg = "<div class='alert alert-danger'>Error getting question sets</div>";   
-        //     include "sets.php";
-        //     return;
-        // }
+        if ($sets_list === false) {
+            $error_msg = "<div class='alert alert-danger'>Error getting question sets</div>";   
+            include "sets.php";
+            return;
+        }
 
         // if(isset($_POST["qset"])) {
         //     $qset = $_POST["qset"];
@@ -73,17 +73,17 @@ class Controller
         //             return;
         // }
 
-        // // $sets_questions = [];
+        $sets_questions = [];
 
-        // // foreach($sets_list as $qset) {
-        // //     $question_list = $this->db->query("select * from project_question where set_id = ?;", "i", $qset["set_id"]);
-        // //     if ($question_list === false) {
-        // //         $error_msg = "<div class='alert alert-danger'>Error getting questions</div>";   
-        // //         include "sets.php";
-        // //         return;
-        // //     }
-        // //     $sets_questions[$qset["set_id"]] = $question_list;
-        // // }
+        foreach($sets_list as $qset) {
+            $question_list = $this->db->query("select * from project_question where set_id = ?;", "i", $qset["set_id"]);
+            if ($question_list === false) {
+                $error_msg = "<div class='alert alert-danger'>Error getting questions</div>";   
+                include "sets.php";
+                return;
+            }
+            $sets_questions[$qset["set_id"]] = $question_list;
+        }
 
         include("templates/quizzes.php");
     }

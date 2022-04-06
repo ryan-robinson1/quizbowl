@@ -48,10 +48,15 @@
             <button class="btn btn-lg btn-secondary bg-purple dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                 Vocab chapter 1
             </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                <li><a class="dropdown-item" href="#">Vocab chapter 2</a></li>
+
+             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                 <?php foreach($sets_list as $set): ?>
+                    <li><a class="dropdown-item" href="#"><?php echo $set["set_name"];?></a></li>
+                 <?php endforeach; ?>
+                 <li><a class="dropdown-item" href="#">New question set</a></li>
+                <!-- <li><a class="dropdown-item" href="#">Vocab chapter 2</a></li>
                 <li><a class="dropdown-item" href="#">Capitals</a></li>
-                <li><a class="dropdown-item" href="#">Old question set</a></li>
+                <li><a class="dropdown-item" href="#">Old question set</a></li> -->
             </ul>
 
             <form action="?command=startgame" method="post" style="display: inline;">
@@ -61,7 +66,7 @@
 
             <form action="?command=makequiz" method="post" style="display: inline;">
                 <button class="btn btn-lg btn-secondary" type="submit">
-                    Make Quiz!
+                    Make Question Set!
                 </button>
             </form>
         </div>
@@ -89,56 +94,61 @@
             </div>
         </li>
 
-        <li class="list-group-item py-0 border-0">
-            <div class="container">
-                <div class="row">
-                    <div class="card col-md-6 p-0 border-0">
-                        <div class="card-body p-5 border border-3 rounded">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    The D1 and D2 Fraunhofer spectral lines form this element’s namesake “doublet.” This metal can be produced via the Castner process or a Downs cell, and its azide is used in the airbags of cars. This element glows bright (*) yellow in the flame test, and
-                                    baking soda is this element’s bicarbonate. For 10 points, name this element which makes up table salt with chloride, has atomic number 11, and has atomic symbol Na.
-                                </li>
-                            </ul>
+        <?php foreach($sets_questions["1"] as $question):?>
+
+            <li class="list-group-item py-0 border-0">
+                <div class="container">
+                    <div class="row">
+                        <div class="card col-md-6 p-0 border-0">
+                            <div class="card-body p-5 border border-3 rounded">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <?php echo $question["question"] ?>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card col-md-6 p-0 border-0">
-                        <div class="card-body p-5 border border-3 rounded">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    Sodium
-                                </li>
-                            </ul>
+                        <div class="card col-md-6 p-0 border-0">
+                            <div class="card-body p-5 border border-3 rounded">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <ul>
+                                            <li>
+                                                <?php if($question["correct_answer"] == 1) echo "<b>";
+                                                    echo "a. " . $question["answer1"];
+                                                    if($question["correct_answer"] == 1) echo "</b>";
+                                                ?>
+                                            </li>
+                                            <li>
+                                                <?php if($question["correct_answer"] == 2) echo "<b>";
+                                                        echo "b. " . $question["answer2"];
+                                                        if($question["correct_answer"] == 2) echo "</b>";
+                                                ?>
+                                                
+                                            </li>
+                                            <li>
+                                                <?php if($question["correct_answer"] == 3) echo "<b>";
+                                                        echo "c. " . $question["answer3"];
+                                                        if($question["correct_answer"] == 3) echo "</b>";
+                                                ?>
+                                                
+                                            </li>
+                                            <li>
+                                                <?php if($question["correct_answer"] == 4) echo "<b>";
+                                                        echo "d. " . $question["answer4"];
+                                                        if($question["correct_answer"] == 4) echo "</b>";
+                                                ?>  
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </li>
-        <li class="list-group-item py-0 border-0">
-            <div class="container">
-                <div class="row">
-                    <div class="card col-md-6 p-0 border-0">
-                        <div class="card-body p-5 border border-3 rounded">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    The D1 and D2 Fraunhofer spectral lines form this element’s namesake “doublet.” This metal can be produced via the Castner process or a Downs cell, and its azide is used in the airbags of cars. This element glows bright (*) yellow in the flame test, and
-                                    baking soda is this element’s bicarbonate. For 10 points, name this element which makes up table salt with chloride, has atomic number 11, and has atomic symbol Na.
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="card col-md-6 p-0 border-0">
-                        <div class="card-body p-5 border border-3 rounded">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    Sodium
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </li>
+            </li>
+
+        <?php endforeach; ?>
     </ul>
     <!--for spacing at bottom of screen-->
     <div class="p-5"></div>
