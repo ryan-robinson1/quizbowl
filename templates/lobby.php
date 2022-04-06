@@ -38,7 +38,7 @@
    </nav>
 
    <header>
-      <h2>PIN: 748492</h2>
+      <h2>PIN: <?= $_SESSION["pin"] ?></h2>
       <hr>
    </header>
 
@@ -49,19 +49,13 @@
                <h3 class="card-title bg-primary text-light p-3">
                   Blue Team
                </h3>
+
                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">
-                     User 1
-                  </li>
-                  <li class="list-group-item">
-                     John
-                  </li>
-                  <li class="list-group-item">
-                     Mary
-                  </li>
-                  <li class="list-group-item">
-                     Mary 2
-                  </li>
+                  <?php foreach ($_SESSION["blue_players"] as $player) : ?>
+                     <li class="list-group-item">
+                        <?= $player["username"] ?>
+                     </li>
+                  <?php endforeach; ?>
                </ul>
             </div>
          </div>
@@ -72,18 +66,11 @@
                   Red Team
                </h3>
                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">
-                     User 5
-                  </li>
-                  <li class="list-group-item">
-                     Marry
-                  </li>
-                  <li class="list-group-item">
-                     Marie
-                  </li>
-                  <li class="list-group-item">
-                     Maerie
-                  </li>
+                  <?php foreach ($_SESSION["red_players"] as $player) : ?>
+                     <li class="list-group-item">
+                        <?= $player["username"] ?>
+                     </li>
+                  <?php endforeach; ?>
                </ul>
             </div>
          </div>

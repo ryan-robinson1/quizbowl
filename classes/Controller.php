@@ -34,24 +34,36 @@ class Controller
             case "makequiz":
                 $this->makequiz();
                 break;
+            case "logout_player":
+                $this->logout_player();
+                break;
             case "logout":
-                session_unset();
-                session_destroy();
+                $this->logout();
             default:
                 $this->start();
         }
     }
-
-    // Displays all question sets for a user and allows them to select and view the questions
-    // in a single set at a time
+    public function logout()
+    {
+        $this->db->query("delete from project_player where game_id=?;", "s", $_SESSION["pin"]);
+        $this->db->query("delete from project_runningGame where host=?;", "s", $_SESSION["user"]);
+        session_unset();
+        session_destroy();
+    }
+    public function logout_player()
+    {
+        session_unset();
+        session_destroy();
+        $this->start();
+    }
     public function quizzes()
     {
         $error_msg = "";
 
-        if(isset($_SESSION["current_set"])) {
+        if (isset($_SESSION["current_set"])) {
             unset($_SESSION["current_set"]);
             unset($_SESSION["current_set_name"]);
-        } 
+        }
 
         // gets all sets for the user
         $sets_list = $this->db->query("select set_id, set_name from project_questionSet where username = ?;", "s", $_SESSION["user"]);
@@ -88,31 +100,36 @@ class Controller
         $set_name_created = isset($_SESSION["current_set"]) || isset($_POST["set_name"]);
         echo $set_name_created;
 
-        // if set is not already made, allow user to create a new set
-        if($set_name_created) {
-            if(isset($_POST["set_name"])) {
-                $res = $this->db->query("insert into project_questionset(set_name, username) values (?, ?)", "ss", $_POST["set_name"] , $_SESSION["user"]);
+        if ($set_name_created) {
+            if (isset($_POST["set_name"])) {
+                $res = $this->db->query("insert into project_questionset(set_name, username) values (?, ?)", "ss", $_POST["set_name"], $_SESSION["user"]);
                 if ($res === false) {
-                    $error_msg = "<div class='alert alert-danger'>Error inserting new set</div>";   
+                    $error_msg = "<div class='alert alert-danger'>Error inserting new set</div>";
                     include("templates/new_set.php");
-                    return; 
-                }
-                else {
+                    return;
+                } else {
                     $_SESSION["current_set"] = $this->db->getLastInsertedID();
-                    $_SESSION["current_set_name"] =$_POST["set_name"];
+                    $_SESSION["current_set_name"] = $_POST["set_name"];
                 }
-        }
-        // if the set is already created, allow users to add a question to that set
-        else {
-                $res = $this->db->query("insert into project_question(
+            } else {
+                $res = $this->db->query(
+                    "insert into project_question(
                         set_id, question, question_number, answer1, answer2, answer3, answer4, correct_answer)
-                        values (?, ?, ?, ?, ?, ?, ?, ?)", "isissssi", 
-                        $_SESSION["current_set"], $_POST["question"], 1, $_POST["answer1"], $_POST["answer2"],
-                        $_POST["answer3"], $_POST["answer4"], $_POST["correct_answer"]);
+                        values (?, ?, ?, ?, ?, ?, ?, ?)",
+                    "isissssi",
+                    $_SESSION["current_set"],
+                    $_POST["question"],
+                    1,
+                    $_POST["answer1"],
+                    $_POST["answer2"],
+                    $_POST["answer3"],
+                    $_POST["answer4"],
+                    $_POST["correct_answer"]
+                );
                 if ($res === false) {
-                    $error_msg = "<div class='alert alert-danger'>Error inserting new question</div>";   
+                    $error_msg = "<div class='alert alert-danger'>Error inserting new question</div>";
                     include("templates/new_set.php");
-                    return; 
+                    return;
                 }
             }
         }
@@ -121,10 +138,33 @@ class Controller
     }
     public function startgame()
     {
+        $user_game_num =  $this->db->query("select * from project_runningGame where host = ?;", "s", $_SESSION["user"]);
+        if (count($user_game_num) <= 0) {
+            $pin = rand(10000, 99999);
+            $result =  $this->db->query("select * from project_runningGame where game_id = ?;", "i", $pin);
+            while (count($result) > 0) {
+                $pin = rand(10000, 99999);
+                $result =  $this->db->query("select * from project_runningGame where game_id = ?;", "i", $pin);
+            }
+            $insert = $this->db->query(
+                "insert into project_runningGame (game_id, set_id, host) values (?, ?, ?);",
+                "iis",
+                $pin,
+                3,
+                $_SESSION["user"]
+            );
+            $_SESSION["pin"] = $pin;
+            $_SESSION["set_id"] = 3;
+        }
+        $_SESSION["blue_players"] = $this->db->query("select * from project_player where game_id = ? and team = ?;", "is", $_SESSION["pin"], "0");
+        $_SESSION["red_players"] = $this->db->query("select * from project_player where game_id = ? and team = ?;", "is", $_SESSION["pin"], "1");
         include("templates/lobby.php");
     }
     public function playgame()
     {
+        if (!isset($_SESSION["pin"])) {
+            header("Location: ?command=");
+        }
         include("templates/buzzer.php");
     }
     public function start()
@@ -135,16 +175,19 @@ class Controller
     {
         if (isset($_POST["pin"])) {
             //Look for a running game
+
             $game = $this->db->query("select * from project_runningGame where game_id = ?;", "i", $_POST["pin"]);
             if ($game === false) {
                 $error_msg = "Game does not exist";
             } else {
+                $_SESSION["pin"] = $_POST["pin"];
+                $teams = "01";
                 $insert = $this->db->query(
                     "insert into project_player (username, game_id, team) values (?, ?, ?);",
                     "sis",
                     $_POST["name"],
                     $_POST["pin"],
-                    "0"
+                    $teams[rand() % 2]
                 );
                 if ($insert === false) {
                     $error_msg = "Duplicate user";
@@ -153,6 +196,7 @@ class Controller
                 }
             }
         }
+
         //TODO: Wrap up and delete player once game finishes
         include("templates/join.php");
     }
