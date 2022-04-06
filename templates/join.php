@@ -14,16 +14,20 @@
 <body>
     <div class="container" style="margin-top: 15px;">
         <div class="row justify-content-center">
-            <div class="card" style="height:280px">
+            <div class="card" style="height:350px">
                 <div class="card-body">
                     <h1 style="text-align:center">QuizBowl</h1>
-                    <form action="?command=playgame" method="post">
+                    <form action="?command=join" method="post">
                         <div class="form-group">
                             <label for="number"><span>Game PIN</span></label>
-                            <input type="number" class="form-control" id="number" name="number">
+                            <input type="number" class="form-control" id="number" name="pin">
+                        </div>
+                        <div class="form-group">
+                            <label for="number"><span>Username</span></label>
+                            <input type="text" class="form-control" id="name" name="name">
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary" style="background-color: #8b71e2 !important;"><span>Join</span></button>
+                            <button type="submit" class="btn btn-primary" style="background-color: purple !important;"><span>Join</span></button>
                         </div>
 
                     </form>
