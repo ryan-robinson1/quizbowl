@@ -17,8 +17,8 @@ class GameController {
             case "sets":
                 $this->sets();
                 break;
-            case "new_set":
-                $this->newset();
+            case "newset":
+                $this->new_set();
                 break;
             case "joingame":
                 $this->join_game();
@@ -79,6 +79,51 @@ class GameController {
 
         //if user isn't logged in, redirect to home page, maybe with error message?
         //possibly load question sets page with directions to log in to create sets?
+        //otherwise
+
+        //also still have to do something with $error_msg
+
+        $error_msg = "";
+
+        $qset;
+
+        $sets_list = $this->db->query("select set_id, set_name from project_questionSet where user_email = ?;", "s", $_SESSION["email"]);
+
+        if ($sets_list === false) {
+            $error_msg = "<div class='alert alert-danger'>Error getting question sets</div>";   
+            include "sets.php";
+            return;
+        }
+
+        if(isset($_POST["qset"])) {
+            $qset = $_POST["qset"];
+        }
+        else if(count($sets_list) > 0) {
+           $qset = $sets_list[0]["set_id"];
+        }
+        else {
+            $qset = -1;
+        }
+
+        $question_list = $this->db->query("select * from project_question where set_id = ?;", "i", $qset);
+
+        if ($question_list === false) {
+                    $error_msg = "<div class='alert alert-danger'>Error getting questions</div>";   
+                    include "sets.php";
+                    return;
+        }
+
+        // $sets_questions = [];
+
+        // foreach($sets_list as $qset) {
+        //     $question_list = $this->db->query("select * from project_question where set_id = ?;", "i", $qset["set_id"]);
+        //     if ($question_list === false) {
+        //         $error_msg = "<div class='alert alert-danger'>Error getting questions</div>";   
+        //         include "sets.php";
+        //         return;
+        //     }
+        //     $sets_questions[$qset["set_id"]] = $question_list;
+        // }
 
         include "sets.php";
 
@@ -88,6 +133,10 @@ class GameController {
 
         //if user isn't logged in, redirect to home page, maybe with error message?
         //possibly load question sets page with directions to log in to create sets?
+
+        //lots of stuff to upadate on this page
+        //plus everything about checking if this game exists to join, then joining it, then getting
+        //info about other users etc
 
         include "lobby.php";
 

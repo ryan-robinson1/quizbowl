@@ -27,8 +27,7 @@
                      <a class="nav-link active" href="sets.html">Question sets</a>
                   </li>
                </ul>
-               <!--placeholder reference until we implement sign in page-->
-               <a class ="d-flex btn btn-light px-4" href="#">Sign in</a>
+               <a class ="d-flex btn btn-light px-4" href="?command=login">Sign in</a>
             </div>
          </nav>
 
@@ -40,18 +39,84 @@
 
          <div class="container"> 
             <div class="dropdown p-4 text-center">
-               <button class="btn btn-lg btn-secondary bg-purple dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                  Vocab chapter 1
-               </button>
-               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-               <li><a class="dropdown-item" href="#">Vocab chapter 2</a></li>
-               <li><a class="dropdown-item" href="#">Capitals</a></li>
-               <li><a class="dropdown-item" href="#">Old question set</a></li>
-               </ul>
+               <form action="?command=sets" method="post">
+                  <select class="form-select form-select-lg mb-3" name = "qset">
+                     <option selected>
+                        <?php
+                           echo $qset;
+                        ?>
+                     </option>
+                     <?php
+                        foreach($sets_list as $set) {
+                           echo "<option value = \"" . $set["set_id"] . "\">" . $set["set_name"] . "</option>";
+                        }
+                     ?>
+                  </select>
+                  <div class="text-center">                
+                        <button type="submit" class="btn btn-secondary">Select question set</button>
+                  </div>
+                  <!-- <button class="btn btn-lg btn-secondary bg-purple dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"> -->
+                  <!-- <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                 
+                  <li><a class="dropdown-item" href="#">Vocab chapter 2</a></li>
+                  <li><a class="dropdown-item" href="#">Capitals</a></li>
+                  <li><a class="dropdown-item" href="#">Old question set</a></li> -->
+               </form>
+               <!-- <form action="?command=newset" method="post">
+                  <a type = "submit" class ="btn btn-light px-4" href="?command=newset">Add new question to selected set</a>
+               </form> -->
             </div>
          </div>
+         <div class="container">
+            <table class="table"> 
+               <thead class="thead-dark"> 
+                  <tr>
+                     <th scope="col">Question</th>
+                     <th scope="col">Answers (correct in bold)</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <?php foreach ($question_list as $question): ?>
+                     <tr>
+                        <td><?php echo $question["question"]?></td>
+                        <td>
+                           <ul>
+                              <li>
+                                 <?php if($question["correct_answer"] == 1) echo "<b>";
+                                        echo "a. " . $question["answer1"];
+                                        if($question["correct_answer"] == 1) echo "</b>";
+                                  ?>
+                             </li>
+                             <li>
+                                 <?php if($question["correct_answer"] == 2) echo "<b>";
+                                        echo "b. " . $question["answer2"];
+                                        if($question["correct_answer"] == 2) echo "</b>";
+                                  ?>
+                                 
+                             </li>
+                             <li>
+                                 <?php if($question["correct_answer"] == 3) echo "<b>";
+                                        echo "c. " . $question["answer3"];
+                                        if($question["correct_answer"] == 3) echo "</b>";
+                                  ?>
+                                 
+                             </li>
+                             <li>
+                                  <?php if($question["correct_answer"] == 4) echo "<b>";
+                                        echo "d. " . $question["answer4"];
+                                        if($question["correct_answer"] == 4) echo "</b>";
+                                  ?>  
+                             </li>
+                            </ul>
+                        </td>
+                     </tr>
+                  <?php endforeach; ?>
 
-         <ul class="list-group"> 
+               </tbody>
+            </table>
+         </div>
+
+         <!-- <ul class="list-group"> 
             <li class="list-group-item py-0 border-0">
                <div class="container">
                   <div class="row">
@@ -76,6 +141,18 @@
             <li class="list-group-item py-0 border-0">
                <div class="container">
                   <div class="row">
+                     <?php
+
+                     // echo  "<div class=\"card col-md-6 p-0 border-0\">
+                     // <div class=\"card-body p-5 border border-3 rounded\">
+                     //    <ul class=\"list-group list-group-flush\">
+                     //       <li class=\"list-group-item\">" ;
+
+
+                     // echo     "</li></ul> </div> </div>";
+
+                     ?>
+
                      <div class="card col-md-6 p-0 border-0">
                            <div class="card-body p-5 border border-3 rounded">
                               <ul class="list-group list-group-flush">
@@ -100,7 +177,10 @@
                            </ul>
                         </div>
                      </div>
+
                   </div>
+
+
                </div>
             </li>
             <li class="list-group-item py-0 border-0">
@@ -133,7 +213,7 @@
                   </div>
                </div>
             </li>
-         </ul> 
+         </ul>  -->
          <!--for spacing at bottom of screen-->
          <div class="p-5"></div>   
 
