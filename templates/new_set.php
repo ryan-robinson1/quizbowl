@@ -18,11 +18,11 @@
         <div class="container">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <!-- <li class="nav-item px-4">
-                    <a class="nav-link active" href="index.html">Home</a>
-                </li>
-                <li class="nav-item px-4">
-                    <a class="nav-link active" href="sets.html">Question sets</a>
+                    <a class="nav-link active" href="?command=">Home</a>
                 </li> -->
+                <li class="nav-item px-4">
+                    <a class="nav-link active" href="?command=quizzes">My question sets</a>
+                </li>
             </ul>
 
             <div class="btn-group">
@@ -37,55 +37,70 @@
     </nav>
 
     <div class="p-5 mb-4 bg-light rounded-3">
-        <div class="container-fluid py-5">
-            <h1 class="display-5 fw-bold text-center">Create a New Question Set</h1>
-        </div>
+         <?php if($set_name_created == false): ?>
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold text-center">Create a New Set</h1>
+            </div>
+        <?php endif; ?>
+        <?php if($set_name_created == true): ?>
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold text-center">Add a New Question to <?php echo $_SESSION["current_set_name"];?></h1>
+            </div>
+        <?php endif; ?>
     </div>
+
+    <?php echo $error_msg; ?>
 
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-4">
-                <form action="?command=newset" method="post">
-                    <div class="mb-3">
-                        <label for="t_name" class="form-label">New question set name</label>
-                        <input type="text" class="form-control" id="t_name" name="t_name" required />
-                    </div>
-                </form>
-                <form>
-                    <div class="mb-3">
-                        <label for="category" class="form-label">Question</label>
-                        <input type="text" class="form-control" id="category" name="category" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="category" class="form-label">Answer option 1</label>
-                        <input type="text" class="form-control" id="category" name="category" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="category" class="form-label">Answer option 2</label>
-                        <input type="text" class="form-control" id="category" name="category" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="category" class="form-label">Answer option 3</label>
-                        <input type="text" class="form-control" id="category" name="category" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="category" class="form-label">Answer option 4</label>
-                        <input type="text" class="form-control" id="category" name="category" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="category" class="form-label">Correct answer</label>
-                        <select class="form-select form-select-lg mb-3" id="category" name="correct_answer" required>
-                            <option value="1">1
-                            <option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        </select>
-                    </div>
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary">Submit new question</button>
-                    </div>
-                </form>
+                <?php if($set_name_created == false): ?>
+                    <form action="?command=makequiz" method="post">
+                        <div class="mb-3">
+                            <label for="set_name" class="form-label">New set name</label>
+                            <input type="text" class="form-control" id="set_name" name="set_name" required />
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                <?php endif; ?>
+                <?php if($set_name_created == true): ?>
+                    <form action="?command=makequiz" method="post">
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Question</label>
+                            <input type="text" class="form-control" id="category" name="question" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Answer option 1</label>
+                            <input type="text" class="form-control" id="category" name="answer1" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Answer option 2</label>
+                            <input type="text" class="form-control" id="category" name="answer2" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Answer option 3</label>
+                            <input type="text" class="form-control" id="category" name="answer3" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Answer option 4</label>
+                            <input type="text" class="form-control" id="category" name="answer4" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Correct answer</label>
+                            <select class="form-select form-select-lg mb-3" id="category" name="correct_answer" required>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                <?php endif; ?>
             </div>
         </div>
     </div>

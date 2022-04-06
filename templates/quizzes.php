@@ -46,14 +46,14 @@
     <div class="container">
         <div class="dropdown p-4 text-center">
             <button class="btn btn-lg btn-secondary bg-purple dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                Vocab chapter 1
+                Select set
             </button>
 
              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                  <?php foreach($sets_list as $set): ?>
                     <li><a class="dropdown-item" href="#"><?php echo $set["set_name"];?></a></li>
                  <?php endforeach; ?>
-                 <li><a class="dropdown-item" href="#">New question set</a></li>
+                 <!-- <li><a class="dropdown-item" href="#">New question set</a></li> -->
                 <!-- <li><a class="dropdown-item" href="#">Vocab chapter 2</a></li>
                 <li><a class="dropdown-item" href="#">Capitals</a></li>
                 <li><a class="dropdown-item" href="#">Old question set</a></li> -->

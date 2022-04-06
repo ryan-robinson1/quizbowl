@@ -89,6 +89,37 @@ class Controller
     }
     public function makequiz()
     {
+        $error_msg = "";
+        //if(isset($_POST["set_name"])) $_SESSON["current_set"] = $_POST["set_name"];
+        $set_name_created = isset($_SESSION["current_set"]) || isset($_POST["set_name"]);
+
+        if($set_name_created) {
+            if(isset($_POST["set_name"])) {
+                $res = $this->db->query("insert into project_questionset(set_name, username) values (?, ?)", "ss", $_POST["set_name"] , $_SESSION["user"]);
+                if ($res === false) {
+                    $error_msg = "<div class='alert alert-danger'>Error inserting new set</div>";   
+                    include("templates/new_set.php");
+                    return; 
+                }
+                else {
+                    $_SESSION["current_set"] = $this->db->getLastInsertedID();
+                    $_SESSION["current_set_name"] =$_POST["set_name"];
+                }
+            }
+            else {
+                $res = $this->db->query("insert into project_question(
+                        set_id, question, question_number, answer1, answer2, answer3, answer4, correct_answer)
+                        values (?, ?, ?, ?, ?, ?, ?, ?)", "isissssi", 
+                        $_SESSION["current_set"], $_POST["question"], 1, $_POST["answer1"], $_POST["answer2"],
+                        $_POST["answer3"], $_POST["answer4"], $_POST["correct_answer"]);
+                if ($res === false) {
+                    $error_msg = "<div class='alert alert-danger'>Error inserting new question</div>";   
+                    include("templates/new_set.php");
+                    return; 
+                }
+            }
+        }
+
         include("templates/new_set.php");
     }
     public function startgame()
