@@ -50,22 +50,10 @@
                 Select set
             </button>
 
-<<<<<<< Updated upstream
              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                  <?php foreach($sets_list as $set): ?>
                     <li><a class="dropdown-item" href="?command=quizzes&sid=<?=$set["set_id"]?>"><?php echo $set["set_name"];?></a></li>
                  <?php endforeach; ?>
-=======
-
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                <?php foreach ($sets_list as $set) : ?>
-                    <li><a class="dropdown-item" href="#"><?php echo $set["set_name"]; ?></a></li>
-                <?php endforeach; ?>
-                <li><a class="dropdown-item" href="#">New question set</a></li>
-                <!-- <li><a class="dropdown-item" href="#">Vocab chapter 2</a></li>
-                <li><a class="dropdown-item" href="#">Capitals</a></li>
-                <li><a class="dropdown-item" href="#">Old question set</a></li> -->
->>>>>>> Stashed changes
             </ul>
 
             <form action="?command=startgame" method="post" style="display: inline;">
@@ -103,7 +91,6 @@
             </div>
         </li>
 
-<<<<<<< Updated upstream
         <?php 
         $selected_set = "-1";
         if(isset($_GET["sid"])) {
@@ -111,10 +98,6 @@
         }
         if(isset($sets_questions[$selected_set])) {
             foreach($sets_questions[$selected_set] as $question):?>
-=======
-        <?php foreach ($sets_questions["3"] as $question) : ?>
-
->>>>>>> Stashed changes
             <li class="list-group-item py-0 border-0">
                 <div class="container">
                     <div class="row">
