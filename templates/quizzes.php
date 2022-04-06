@@ -50,10 +50,22 @@
                 Select set
             </button>
 
+<<<<<<< Updated upstream
              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                  <?php foreach($sets_list as $set): ?>
                     <li><a class="dropdown-item" href="?command=quizzes&sid=<?=$set["set_id"]?>"><?php echo $set["set_name"];?></a></li>
                  <?php endforeach; ?>
+=======
+
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <?php foreach ($sets_list as $set) : ?>
+                    <li><a class="dropdown-item" href="#"><?php echo $set["set_name"]; ?></a></li>
+                <?php endforeach; ?>
+                <li><a class="dropdown-item" href="#">New question set</a></li>
+                <!-- <li><a class="dropdown-item" href="#">Vocab chapter 2</a></li>
+                <li><a class="dropdown-item" href="#">Capitals</a></li>
+                <li><a class="dropdown-item" href="#">Old question set</a></li> -->
+>>>>>>> Stashed changes
             </ul>
 
             <form action="?command=startgame" method="post" style="display: inline;">
@@ -91,6 +103,7 @@
             </div>
         </li>
 
+<<<<<<< Updated upstream
         <?php 
         $selected_set = "1";
         if(isset($_GET["sid"])) {
@@ -98,6 +111,10 @@
         }
         if(isset($sets_questions[$selected_set])) {
             foreach($sets_questions[$selected_set] as $question):?>
+=======
+        <?php foreach ($sets_questions["3"] as $question) : ?>
+
+>>>>>>> Stashed changes
             <li class="list-group-item py-0 border-0">
                 <div class="container">
                     <div class="row">
@@ -116,30 +133,30 @@
                                     <li class="list-group-item">
                                         <ul>
                                             <li>
-                                                <?php if($question["correct_answer"] == 1) echo "<b>";
-                                                    echo "a. " . $question["answer1"];
-                                                    if($question["correct_answer"] == 1) echo "</b>";
+                                                <?php if ($question["correct_answer"] == 1) echo "<b>";
+                                                echo "a. " . $question["answer1"];
+                                                if ($question["correct_answer"] == 1) echo "</b>";
                                                 ?>
                                             </li>
                                             <li>
-                                                <?php if($question["correct_answer"] == 2) echo "<b>";
-                                                        echo "b. " . $question["answer2"];
-                                                        if($question["correct_answer"] == 2) echo "</b>";
+                                                <?php if ($question["correct_answer"] == 2) echo "<b>";
+                                                echo "b. " . $question["answer2"];
+                                                if ($question["correct_answer"] == 2) echo "</b>";
                                                 ?>
-                                                
+
                                             </li>
                                             <li>
-                                                <?php if($question["correct_answer"] == 3) echo "<b>";
-                                                        echo "c. " . $question["answer3"];
-                                                        if($question["correct_answer"] == 3) echo "</b>";
+                                                <?php if ($question["correct_answer"] == 3) echo "<b>";
+                                                echo "c. " . $question["answer3"];
+                                                if ($question["correct_answer"] == 3) echo "</b>";
                                                 ?>
-                                                
+
                                             </li>
                                             <li>
-                                                <?php if($question["correct_answer"] == 4) echo "<b>";
-                                                        echo "d. " . $question["answer4"];
-                                                        if($question["correct_answer"] == 4) echo "</b>";
-                                                ?>  
+                                                <?php if ($question["correct_answer"] == 4) echo "<b>";
+                                                echo "d. " . $question["answer4"];
+                                                if ($question["correct_answer"] == 4) echo "</b>";
+                                                ?>
                                             </li>
                                         </ul>
                                     </li>

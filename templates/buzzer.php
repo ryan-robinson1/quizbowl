@@ -16,7 +16,7 @@
 
 <body>
     <header>
-        <h2>PIN: 748492</h2>
+        <h2>PIN: <?= $_SESSION["pin"] ?></h2>
         <hr>
     </header>
     <div class="container">
