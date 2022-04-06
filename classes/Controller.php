@@ -19,6 +19,9 @@ class Controller
             case "join":
                 $this->join();
                 break;
+            case "in_session":
+                $this->in_session();
+                break;
             case "login_":
                 $this->login();
                 break;
@@ -55,6 +58,13 @@ class Controller
         session_unset();
         session_destroy();
         $this->start();
+    }
+    public function in_session()
+    {
+        echo json_encode(array(
+            $_SESSION["blue_players"],
+            $_SESSION["red_players"],
+        ));
     }
     public function quizzes()
     {
@@ -173,9 +183,9 @@ class Controller
     }
     public function join()
     {
-        if (isset($_POST["pin"])) {
-            //Look for a running game
-
+        $pin_pattern = "/^[0-9][0-9][0-9][0-9][0-9]$/";
+        if (isset($_POST["pin"]) && preg_match($pin_pattern, $_POST["pin"])) {
+            //Look for a running gameW
             $game = $this->db->query("select * from project_runningGame where game_id = ?;", "i", $_POST["pin"]);
             if ($game === false) {
                 $error_msg = "Game does not exist";

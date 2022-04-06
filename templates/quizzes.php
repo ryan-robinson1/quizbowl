@@ -50,22 +50,12 @@
                 Select set
             </button>
 
-<<<<<<< Updated upstream
-             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                 <?php foreach($sets_list as $set): ?>
-                    <li><a class="dropdown-item" href="?command=quizzes&sid=<?=$set["set_id"]?>"><?php echo $set["set_name"];?></a></li>
-                 <?php endforeach; ?>
-=======
 
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <?php foreach ($sets_list as $set) : ?>
-                    <li><a class="dropdown-item" href="#"><?php echo $set["set_name"]; ?></a></li>
+                    <li><a class="dropdown-item" href="?command=quizzes&sid=<?= $set["set_id"] ?>"><?php echo $set["set_name"]; ?></a></li>
                 <?php endforeach; ?>
-                <li><a class="dropdown-item" href="#">New question set</a></li>
-                <!-- <li><a class="dropdown-item" href="#">Vocab chapter 2</a></li>
-                <li><a class="dropdown-item" href="#">Capitals</a></li>
-                <li><a class="dropdown-item" href="#">Old question set</a></li> -->
->>>>>>> Stashed changes
+
             </ul>
 
             <form action="?command=startgame" method="post" style="display: inline;">
@@ -103,71 +93,69 @@
             </div>
         </li>
 
-<<<<<<< Updated upstream
-        <?php 
+
+        <?php
         $selected_set = "-1";
-        if(isset($_GET["sid"])) {
+        if (isset($_GET["sid"])) {
             $selected_set = $_GET["sid"];
         }
-        if(isset($sets_questions[$selected_set])) {
-            foreach($sets_questions[$selected_set] as $question):?>
-=======
-        <?php foreach ($sets_questions["3"] as $question) : ?>
+        if (isset($sets_questions[$selected_set])) {
+            foreach ($sets_questions[$selected_set] as $question) : ?>
 
->>>>>>> Stashed changes
-            <li class="list-group-item py-0 border-0">
-                <div class="container">
-                    <div class="row">
-                        <div class="card col-md-6 p-0 border-0">
-                            <div class="card-body p-5 border border-3 rounded">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">
-                                        <?php echo $question["question"] ?>
-                                    </li>
-                                </ul>
+                <li class="list-group-item py-0 border-0">
+                    <div class="container">
+                        <div class="row">
+                            <div class="card col-md-6 p-0 border-0">
+                                <div class="card-body p-5 border border-3 rounded">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">
+                                            <?php echo $question["question"] ?>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card col-md-6 p-0 border-0">
-                            <div class="card-body p-5 border border-3 rounded">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">
-                                        <ul>
-                                            <li>
-                                                <?php if ($question["correct_answer"] == 1) echo "<b>";
-                                                echo "a. " . $question["answer1"];
-                                                if ($question["correct_answer"] == 1) echo "</b>";
-                                                ?>
-                                            </li>
-                                            <li>
-                                                <?php if ($question["correct_answer"] == 2) echo "<b>";
-                                                echo "b. " . $question["answer2"];
-                                                if ($question["correct_answer"] == 2) echo "</b>";
-                                                ?>
+                            <div class="card col-md-6 p-0 border-0">
+                                <div class="card-body p-5 border border-3 rounded">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">
+                                            <ul>
+                                                <li>
+                                                    <?php if ($question["correct_answer"] == 1) echo "<b>";
+                                                    echo "a. " . $question["answer1"];
+                                                    if ($question["correct_answer"] == 1) echo "</b>";
+                                                    ?>
+                                                </li>
+                                                <li>
+                                                    <?php if ($question["correct_answer"] == 2) echo "<b>";
+                                                    echo "b. " . $question["answer2"];
+                                                    if ($question["correct_answer"] == 2) echo "</b>";
+                                                    ?>
 
-                                            </li>
-                                            <li>
-                                                <?php if ($question["correct_answer"] == 3) echo "<b>";
-                                                echo "c. " . $question["answer3"];
-                                                if ($question["correct_answer"] == 3) echo "</b>";
-                                                ?>
+                                                </li>
+                                                <li>
+                                                    <?php if ($question["correct_answer"] == 3) echo "<b>";
+                                                    echo "c. " . $question["answer3"];
+                                                    if ($question["correct_answer"] == 3) echo "</b>";
+                                                    ?>
 
-                                            </li>
-                                            <li>
-                                                <?php if ($question["correct_answer"] == 4) echo "<b>";
-                                                echo "d. " . $question["answer4"];
-                                                if ($question["correct_answer"] == 4) echo "</b>";
-                                                ?>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
+                                                </li>
+                                                <li>
+                                                    <?php if ($question["correct_answer"] == 4) echo "<b>";
+                                                    echo "d. " . $question["answer4"];
+                                                    if ($question["correct_answer"] == 4) echo "</b>";
+                                                    ?>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </li>
+                </li>
 
-        <?php endforeach; } ?>
+        <?php endforeach;
+        } ?>
     </ul>
     <!--for spacing at bottom of screen-->
     <div class="p-5"></div>
