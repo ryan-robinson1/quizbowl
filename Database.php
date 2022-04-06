@@ -59,7 +59,7 @@ class Database {
     CREATE TABLE project_runningGame (
         game_id int NOT NULL,
         set_id int NOT NULL,
-        host int NOT NULL,
+        host varchar(300) NOT NULL,
         FOREIGN KEY (host) REFERENCES project_user(email),
         FOREIGN KEY (set_id) REFERENCES project_questionSet(set_id),
         PRIMARY KEY (game_id)
@@ -72,9 +72,6 @@ class Database {
         FOREIGN KEY (game_id) REFERENCES project_runningGame(game_id),
         PRIMARY KEY (username)
     );
-
-
-    INSERT INTO hw5_transaction(user_email, name, category, t_date, amount, type) VALUES ( "a@a", "test transaction", "groceries", "2022:03:29", 8.50, "debit");
 
     */
 
