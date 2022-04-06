@@ -79,7 +79,12 @@
 
    <div class="container">
       <div class="row p-5">
-         <a class="btn btn-success" style="font-size:40px" href="buzzer2.html"><strong>Begin!</strong></a>
+         <form action="?command=in_session" method="post">
+            <div class="text-center">
+               <button type="submit" class="btn btn-success" style="font-size:40px"><span>Begin!</span></button>
+            </div>
+         </form>
+
       </div>
    </div>
 
