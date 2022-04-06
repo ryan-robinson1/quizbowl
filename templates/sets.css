@@ -1,0 +1,8 @@
+/* Author: Julian Wilson */
+
+.bg-purple {
+    background-color: purple
+}
+.bg-purple:hover, .bg-purple:active, .bg-purple:focus {
+    background-color:#754275;
+}

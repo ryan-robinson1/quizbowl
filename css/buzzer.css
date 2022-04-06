@@ -1,0 +1,124 @@
+/* Author: Ryan Robinson */
+
+hr {
+  margin: 0px -20px 0px;
+  border: 0;
+  border-top: 10px solid #c9c7c7;
+}
+
+body {
+  height: 100%;
+  overflow: hidden;
+  /* Hide scrollbars */
+}
+
+footer hr {
+  margin: 0px -20px 0px;
+  border: 0;
+  border-top: 10px solid #c9c7c7;
+
+}
+
+body header h2 {
+  font-weight: 900;
+  font-size: 40px;
+  text-align: left;
+  padding-left: 20px;
+  padding-bottom: 10px;
+}
+
+footer h2 {
+  font-weight: 900;
+  font-size: 40px;
+  text-align: left;
+  padding-left: 20px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+header {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+nav {
+  float: right;
+}
+
+.btn {
+  width: 100%;
+  height: 100%;
+  font-size: 50px;
+  font-weight: bolder;
+  color: white;
+
+}
+
+#buzz {
+  background-color: #c60929 !important;
+  text-align: center;
+  font-size: 80px;
+
+}
+
+#score {
+  float: right;
+  padding-right: 10px;
+}
+
+
+.btn:hover, .btn:focus, .btn:active {
+  color: white;
+}
+
+.footer-container {
+  margin-top: 50px;
+}
+
+
+
+[class*="col-"] {
+  float: left;
+
+  width: 100%;
+  /* mobile first - 100% width */
+}
+
+.container {
+  margin-top: 10px;
+  height: 400px;
+
+}
+
+.button_padding {
+  margin-left: 5px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-right: 5px;
+  height: 95%;
+}
+
+.row {
+  width: 100%;
+}
+
+.col-12 {
+  width: 100%;
+  height: 50%;
+  white-space: nowrap;
+}
+
+.col-6 {
+  width: 50%;
+  height: 100%;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.col-8 {
+  width: 66.66%;
+}
+
+.col-4 {
+  width: 33.33%;
+}
