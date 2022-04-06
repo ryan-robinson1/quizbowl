@@ -45,7 +45,10 @@ class Controller
     {
         $error_msg = "";
 
-        $qset;
+        if(isset($_SESSION["current_set"])) {
+            unset($_SESSION["current_set"]);
+            unset($_SESSION["current_set_name"]);
+        } 
 
         $sets_list = $this->db->query("select set_id, set_name from project_questionSet where username = ?;", "s", $_SESSION["user"]);
 
