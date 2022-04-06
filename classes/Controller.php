@@ -41,6 +41,9 @@ class Controller
                 $this->start();
         }
     }
+
+    // Displays all question sets for a user and allows them to select and view the questions
+    // in a single set at a time
     public function quizzes()
     {
         $error_msg = "";
@@ -50,6 +53,7 @@ class Controller
             unset($_SESSION["current_set_name"]);
         } 
 
+        // gets all sets for the user
         $sets_list = $this->db->query("select set_id, set_name from project_questionSet where username = ?;", "s", $_SESSION["user"]);
 
         if ($sets_list === false) {
@@ -58,26 +62,9 @@ class Controller
             return;
         }
 
-        // if(isset($_POST["qset"])) {
-        //     $qset = $_POST["qset"];
-        // }
-        // else if(count($sets_list) > 0) {
-        //    $qset = $sets_list[0]["set_id"];
-        // }
-        // else {
-        //     $qset = -1;
-        // }
-
-        // $question_list = $this->db->query("select * from project_question where set_id = ?;", "i", $qset);
-
-        // if ($question_list === false) {
-        //             $error_msg = "<div class='alert alert-danger'>Error getting questions</div>";   
-        //             include "sets.php";
-        //             return;
-        // }
-
         $sets_questions = [];
 
+        // gets all questions in the sets found above
         foreach ($sets_list as $qset) {
             $question_list = $this->db->query("select * from project_question where set_id = ?;", "i", $qset["set_id"]);
             if ($question_list === false) {
@@ -90,11 +77,18 @@ class Controller
 
         include("templates/quizzes.php");
     }
+
+    // Single function / page that allows users to create a new question set or add a new question
+    // to a question set
     public function makequiz()
     {
         $error_msg = "";
-        $set_name_created = isset($_SESSION["current_set"]) || isset($_POST["set_name"]);
 
+        // checks if we have already created the set
+        $set_name_created = isset($_SESSION["current_set"]) || isset($_POST["set_name"]);
+        echo $set_name_created;
+
+        // if set is not already made, allow user to create a new set
         if($set_name_created) {
             if(isset($_POST["set_name"])) {
                 $res = $this->db->query("insert into project_questionset(set_name, username) values (?, ?)", "ss", $_POST["set_name"] , $_SESSION["user"]);
@@ -107,8 +101,9 @@ class Controller
                     $_SESSION["current_set"] = $this->db->getLastInsertedID();
                     $_SESSION["current_set_name"] =$_POST["set_name"];
                 }
-            }
-            else {
+        }
+        // if the set is already created, allow users to add a question to that set
+        else {
                 $res = $this->db->query("insert into project_question(
                         set_id, question, question_number, answer1, answer2, answer3, answer4, correct_answer)
                         values (?, ?, ?, ?, ?, ?, ?, ?)", "isissssi", 
@@ -152,7 +147,7 @@ class Controller
                     "0"
                 );
                 if ($insert === false) {
-                    $$error_msg = "Duplicate user";
+                    $error_msg = "Duplicate user";
                 } else {
                     header("Location: ?command=playgame");
                 }

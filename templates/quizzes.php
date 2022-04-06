@@ -92,7 +92,7 @@
         </li>
 
         <?php 
-        $selected_set = "1";
+        $selected_set = "-1";
         if(isset($_GET["sid"])) {
             $selected_set = $_GET["sid"];
         }
