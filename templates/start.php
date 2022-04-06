@@ -19,12 +19,12 @@
                     <h1 style="text-align:center">QuizBowl</h1>
                     <form action="?command=login_" method="post">
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary" style="background-color: #8b71e2 !important;"><span>Host</span></button>
+                            <button type="submit" class="btn btn-primary" style="background-color: purple !important;"><span>Host</span></button>
                         </div>
                     </form>
                     <form action="?command=join" method="post">
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary" style="background-color: #8b71e2 !important;"><span>Join</span></button>
+                            <button type="submit" class="btn btn-primary" style="background-color: purple !important;"><span>Join</span></button>
                         </div>
                     </form>
 

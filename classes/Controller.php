@@ -50,7 +50,7 @@ class Controller
         $sets_list = $this->db->query("select set_id, set_name from project_questionSet where username = ?;", "s", $_SESSION["user"]);
 
         if ($sets_list === false) {
-            $error_msg = "<div class='alert alert-danger'>Error getting question sets</div>";   
+            $error_msg = "<div class='alert alert-danger'>Error getting question sets</div>";
             include "sets.php";
             return;
         }
@@ -75,10 +75,10 @@ class Controller
 
         $sets_questions = [];
 
-        foreach($sets_list as $qset) {
+        foreach ($sets_list as $qset) {
             $question_list = $this->db->query("select * from project_question where set_id = ?;", "i", $qset["set_id"]);
             if ($question_list === false) {
-                $error_msg = "<div class='alert alert-danger'>Error getting questions</div>";   
+                $error_msg = "<div class='alert alert-danger'>Error getting questions</div>";
                 include "sets.php";
                 return;
             }
@@ -105,6 +105,27 @@ class Controller
     }
     public function join()
     {
+        if (isset($_POST["pin"])) {
+            //Look for a running game
+            $game = $this->db->query("select * from project_runningGame where game_id = ?;", "i", $_POST["pin"]);
+            if ($game === false) {
+                $error_msg = "Game does not exist";
+            } else {
+                $insert = $this->db->query(
+                    "insert into project_player (username, game_id, team) values (?, ?, ?);",
+                    "sis",
+                    $_POST["name"],
+                    $_POST["pin"],
+                    "0"
+                );
+                if ($insert === false) {
+                    $$error_msg = "Duplicate user";
+                } else {
+                    header("Location: ?command=playgame");
+                }
+            }
+        }
+        //TODO: Wrap up and delete player once game finishes
         include("templates/join.php");
     }
     public function login()

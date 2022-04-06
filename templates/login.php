@@ -27,7 +27,7 @@
                             <input type="password" class="form-control" id="Password" name="password">
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary" style="background-color: #8b71e2 !important;"><span>Log In</span></button>
+                            <button type="submit" class="btn btn-primary" style="background-color: purple !important;"><span>Log In</span></button>
                         </div>
 
                     </form>

@@ -6,6 +6,6 @@ class Config
         "host" => "localhost",
         "user" => "root",
         "pass" => "",
-        "database" => "webpl"
+        "database" => "quizbowl"
     ];
 }
