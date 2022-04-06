@@ -42,6 +42,7 @@
             <h1 class="display-5 fw-bold text-center">My Question Sets</h1>
         </div>
     </div>
+    <?php echo $error_msg; ?>
 
     <div class="container">
         <div class="dropdown p-4 text-center">
@@ -51,12 +52,8 @@
 
              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                  <?php foreach($sets_list as $set): ?>
-                    <li><a class="dropdown-item" href="#"><?php echo $set["set_name"];?></a></li>
+                    <li><a class="dropdown-item" href="?command=quizzes&sid=<?=$set["set_id"]?>"><?php echo $set["set_name"];?></a></li>
                  <?php endforeach; ?>
-                 <!-- <li><a class="dropdown-item" href="#">New question set</a></li> -->
-                <!-- <li><a class="dropdown-item" href="#">Vocab chapter 2</a></li>
-                <li><a class="dropdown-item" href="#">Capitals</a></li>
-                <li><a class="dropdown-item" href="#">Old question set</a></li> -->
             </ul>
 
             <form action="?command=startgame" method="post" style="display: inline;">
@@ -94,8 +91,13 @@
             </div>
         </li>
 
-        <?php foreach($sets_questions["1"] as $question):?>
-
+        <?php 
+        $selected_set = "1";
+        if(isset($_GET["sid"])) {
+            $selected_set = $_GET["sid"];
+        }
+        if(isset($sets_questions[$selected_set])) {
+            foreach($sets_questions[$selected_set] as $question):?>
             <li class="list-group-item py-0 border-0">
                 <div class="container">
                     <div class="row">
@@ -148,7 +150,7 @@
                 </div>
             </li>
 
-        <?php endforeach; ?>
+        <?php endforeach; } ?>
     </ul>
     <!--for spacing at bottom of screen-->
     <div class="p-5"></div>

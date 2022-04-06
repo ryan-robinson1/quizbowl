@@ -93,7 +93,6 @@ class Controller
     public function makequiz()
     {
         $error_msg = "";
-        //if(isset($_POST["set_name"])) $_SESSON["current_set"] = $_POST["set_name"];
         $set_name_created = isset($_SESSION["current_set"]) || isset($_POST["set_name"]);
 
         if($set_name_created) {

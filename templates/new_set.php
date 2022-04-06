@@ -11,6 +11,7 @@
     <title>Create a new question set</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/sets.css">
 </head>
 
 <body>
@@ -20,9 +21,9 @@
                 <!-- <li class="nav-item px-4">
                     <a class="nav-link active" href="?command=">Home</a>
                 </li> -->
-                <li class="nav-item px-4">
+                <!-- <li class="nav-item px-4">
                     <a class="nav-link active" href="?command=quizzes">My question sets</a>
-                </li>
+                </li> -->
             </ul>
 
             <div class="btn-group">
@@ -61,7 +62,8 @@
                             <input type="text" class="form-control" id="set_name" name="set_name" required />
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-secondary bg-purple">Submit</button>
+                            <a type="button" class="btn btn-secondary bg-purple" href="?command=quizzes">Finish</a>
                         </div>
                     </form>
                 <?php endif; ?>
@@ -97,7 +99,8 @@
                             </select>
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-secondary bg-purple">Submit</button>
+                            <a type="button" class="btn btn-secondary bg-purple" href="?command=quizzes">Finish</a>
                         </div>
                     </form>
                 <?php endif; ?>
