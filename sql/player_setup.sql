@@ -1,9 +1,7 @@
-CREATE TABLE player (
-    id int not null auto_increment,
-    username text not null,
-    team text not null,
-    score int not null,
-    user_id int not null,
-    primary key (id)
-);
-
+ CREATE TABLE project_player (
+        username varchar(300) NOT NULL,
+        game_id int NOT NULL,
+        team ENUM("0", "1"), 
+        FOREIGN KEY (game_id) REFERENCES project_runningGame(game_id),
+        PRIMARY KEY (username)
+    );

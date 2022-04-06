@@ -43,6 +43,48 @@ class Controller
     }
     public function quizzes()
     {
+        // $error_msg = "";
+
+        // $qset;
+
+        // $sets_list = $this->db->query("select set_id, set_name from project_questionSet where user_email = ?;", "s", $_SESSION["email"]);
+
+        // if ($sets_list === false) {
+        //     $error_msg = "<div class='alert alert-danger'>Error getting question sets</div>";   
+        //     include "sets.php";
+        //     return;
+        // }
+
+        // if(isset($_POST["qset"])) {
+        //     $qset = $_POST["qset"];
+        // }
+        // else if(count($sets_list) > 0) {
+        //    $qset = $sets_list[0]["set_id"];
+        // }
+        // else {
+        //     $qset = -1;
+        // }
+
+        // $question_list = $this->db->query("select * from project_question where set_id = ?;", "i", $qset);
+
+        // if ($question_list === false) {
+        //             $error_msg = "<div class='alert alert-danger'>Error getting questions</div>";   
+        //             include "sets.php";
+        //             return;
+        // }
+
+        // // $sets_questions = [];
+
+        // // foreach($sets_list as $qset) {
+        // //     $question_list = $this->db->query("select * from project_question where set_id = ?;", "i", $qset["set_id"]);
+        // //     if ($question_list === false) {
+        // //         $error_msg = "<div class='alert alert-danger'>Error getting questions</div>";   
+        // //         include "sets.php";
+        // //         return;
+        // //     }
+        // //     $sets_questions[$qset["set_id"]] = $question_list;
+        // // }
+
         include("templates/quizzes.php");
     }
     public function makequiz()
@@ -68,13 +110,12 @@ class Controller
     public function login()
     {
         if (isset($_POST["user"]) && isset($_POST["password"])) {
-            $data = $this->db->query("select * from user where username = ?;", "s", $_POST["user"]);
+            $data = $this->db->query("select * from project_user where username = ?;", "s", $_POST["user"]);
             if ($data === false) {
                 $error_msg = "Error checking for user";
             } else if (!empty($data)) {
-                if (password_verify($_POST["password"], $data[0]["passwd"])) {
+                if (password_verify($_POST["password"], $data[0]["password"])) {
                     $_SESSION["user"] = $_POST["user"];
-                    $_SESSION["user_id"] = $data[0]["id"];
                     header("Location: ?command=quizzes");
                 } else {
                     $error_msg = "Wrong password";
@@ -82,7 +123,7 @@ class Controller
             } else {
                 // TODO: input validation, create user page
                 $insert = $this->db->query(
-                    "insert into user (username, passwd) values (?, ?);",
+                    "insert into project_user (username, password) values (?, ?);",
                     "ss",
                     $_POST["user"],
                     password_hash($_POST["password"], PASSWORD_DEFAULT)
@@ -91,8 +132,7 @@ class Controller
                     $error_msg = "Error inserting user";
                 } else {
                     $_SESSION["user"] = $_POST["user"];
-                    $_SESSION["user_id"] = $data[0]["id"];
-                    header("Location: ?command=login_");
+                    header("Location: ?command=quizzes");
                 }
             }
         }

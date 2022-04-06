@@ -13,12 +13,16 @@ class Database
             Config::$db["pass"],
             Config::$db["database"]
         );
-        $sql = file_get_contents('sql/quiz_setup.sql');
-        $sql2 = file_get_contents('sql/player_setup.sql');
-        $sql3 = file_get_contents('sql/user_setup.sql');
-        // $this->mysqli->query($sql);
+        $sql1 = file_get_contents('sql/user_setup.sql');
+        $sql2 = file_get_contents('sql/set_setup.sql');
+        $sql3 = file_get_contents('sql/question_setup.sql');
+        $sql4 = file_get_contents('sql/runninggame_setup.sql');
+        $sql5 = file_get_contents('sql/player_setup.sql');
+        // $this->mysqli->query($sql1);
         // $this->mysqli->query($sql2);
         // $this->mysqli->query($sql3);
+        // $this->mysqli->query($sql4);
+        // $this->mysqli->query($sql5);
     }
 
     public function query($query, $bparam = null, ...$params)
