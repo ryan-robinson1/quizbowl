@@ -29,17 +29,16 @@ class Database {
     }
     /* The SQL commands I used to create the tables used for this assignment
     CREATE TABLE project_user (
-        email varchar(300) NOT NULL,
         username varchar(300) NOT NULL,
         password text,
-        PRIMARY KEY (email)
+        PRIMARY KEY (username)
     );
 
     CREATE TABLE project_questionSet (
         set_id int NOT NULL auto_increment,
         set_name varchar(500) NOT NULL,
-        user_email varchar(300) NOT NULL,
-        FOREIGN KEY (user_email) REFERENCES project_user (email),
+        username varchar(300) NOT NULL,
+        FOREIGN KEY (username) REFERENCES project_user (username),
         PRIMARY KEY (set_id)
     );
 
@@ -47,6 +46,7 @@ class Database {
         question_id int NOT NULL auto_increment,
         set_id int NOT NULL, 
         question varchar(500) NOT NULL,
+        question_number int NOT NULL,
         answer1 varchar(500) NOT NULL,
         answer2 varchar(500) NOT NULL,
         answer3 varchar(500) NOT NULL,
@@ -60,7 +60,7 @@ class Database {
         game_id int NOT NULL,
         set_id int NOT NULL,
         host varchar(300) NOT NULL,
-        FOREIGN KEY (host) REFERENCES project_user(email),
+        FOREIGN KEY (host) REFERENCES project_user(username),
         FOREIGN KEY (set_id) REFERENCES project_questionSet(set_id),
         PRIMARY KEY (game_id)
     );
