@@ -62,7 +62,7 @@
                             <input type="text" class="form-control" id="set_name" name="set_name" required />
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-secondary bg-purple">Submit</button>
+                            <button type="submit" class="btn btn-secondary bg-purple">Create set</button>
                             <a type="button" class="btn btn-secondary bg-purple" href="?command=quizzes">Finish</a>
                         </div>
                     </form>
@@ -103,7 +103,7 @@
                             </select>
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-secondary bg-purple">Submit</button>
+                            <button type="submit" class="btn btn-secondary bg-purple">Add question</button>
                             <a type="button" class="btn btn-secondary bg-purple" href="?command=quizzes">Finish</a>
                         </div>
                     </form>
