@@ -74,6 +74,10 @@
                             <input type="text" class="form-control" id="category" name="question" required />
                         </div>
                         <div class="mb-3">
+                            <label for="category" class="form-label">Question number</label>
+                            <input type="number" class="form-control" id="category" name="qnum" required />
+                        </div>
+                        <div class="mb-3">
                             <label for="category" class="form-label">Answer option 1</label>
                             <input type="text" class="form-control" id="category" name="answer1" required />
                         </div>

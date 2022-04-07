@@ -75,14 +75,21 @@
         <li class="list-group-item py-0 border-0">
             <div class="container">
                 <div class="row">
-                    <div class="card col-md-6 p-0 border-0">
+                    <div class="card col-md-2 p-0 border-0">
                         <div class="card-body p-5 border border-3 rounded">
                             <h3 class="card-title text-center bg-purple text-light p-3">
-                                Questions
+                                #
                             </h3>
                         </div>
                     </div>
-                    <div class="card col-md-6 p-0 border-0">
+                    <div class="card col-md-5 p-0 border-0">
+                        <div class="card-body p-5 border border-3 rounded">
+                            <h3 class="card-title text-center bg-purple text-light p-3">
+                                Question
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="card col-md-5 p-0 border-0">
                         <div class="card-body p-5 border border-3 rounded">
                             <h3 class="card-title text-center bg-purple text-light p-3">
                                 Answers
@@ -105,7 +112,19 @@
                 <li class="list-group-item py-0 border-0">
                     <div class="container">
                         <div class="row">
-                            <div class="card col-md-6 p-0 border-0">
+                            <div class="card col-md-2 p-0 border-0">
+                                <div class="card-body p-5 border border-3 rounded">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">
+                                            <!-- <?php echo $question["question_number"] ?> -->
+                                            <a class="btn btn-lg btn-danger" type="button" href="?command=delete_question&?qid= <?php echo $question["question_id"];?>">
+                                                Delete
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card col-md-5 p-0 border-0">
                                 <div class="card-body p-5 border border-3 rounded">
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item">
@@ -114,7 +133,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="card col-md-6 p-0 border-0">
+                            <div class="card col-md-5 p-0 border-0">
                                 <div class="card-body p-5 border border-3 rounded">
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item">

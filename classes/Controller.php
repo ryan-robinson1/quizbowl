@@ -37,6 +37,9 @@ class Controller
             case "makequiz":
                 $this->makequiz();
                 break;
+            case "delete_question":
+                $this->deletequestion();
+                break;
             case "logout_player":
                 $this->logout_player();
                 break;
@@ -88,7 +91,7 @@ class Controller
 
         // gets all questions in the sets found above
         foreach ($sets_list as $qset) {
-            $question_list = $this->db->query("select * from project_question where set_id = ?;", "i", $qset["set_id"]);
+            $question_list = $this->db->query("select * from project_question where set_id = ? order by question_number;", "i", $qset["set_id"]);
             if ($question_list === false) {
                 $error_msg = "<div class='alert alert-danger'>Error getting questions</div>";
                 include "sets.php";
@@ -108,7 +111,6 @@ class Controller
 
         // checks if we have already created the set
         $set_name_created = isset($_SESSION["current_set"]) || isset($_POST["set_name"]);
-        echo $set_name_created;
 
         if ($set_name_created) {
             if (isset($_POST["set_name"])) {
@@ -129,7 +131,7 @@ class Controller
                     "isissssi",
                     $_SESSION["current_set"],
                     $_POST["question"],
-                    1,
+                    $_POST["qnum"],
                     $_POST["answer1"],
                     $_POST["answer2"],
                     $_POST["answer3"],
@@ -210,6 +212,20 @@ class Controller
         //TODO: Wrap up and delete player once game finishes
         include("templates/join.php");
     }
+
+
+    public function deletequestion() {
+        $error_msg = "";
+        if(isset($_GET["qid"])) {
+            $game = $this->db->query("drop * from project_question where question_id = ?;", "i", $_GET["qid"]);
+            if ($game === false) {
+                $error_msg = "Could not delete question";
+            }
+        }
+
+        header("Location: ?command=quizzes");
+    }
+
     public function login()
     {
         if (isset($_POST["user"]) && isset($_POST["password"])) {
