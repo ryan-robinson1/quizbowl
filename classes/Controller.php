@@ -114,7 +114,7 @@ class Controller
 
         if ($set_name_created) {
             if (isset($_POST["set_name"])) {
-                $res = $this->db->query("insert into project_questionset(set_name, username) values (?, ?)", "ss", $_POST["set_name"], $_SESSION["user"]);
+                $res = $this->db->query("insert into project_questionSet(set_name, username) values (?, ?)", "ss", $_POST["set_name"], $_SESSION["user"]);
                 if ($res === false) {
                     $error_msg = "<div class='alert alert-danger'>Error inserting new set</div>";
                     include("templates/new_set.php");
@@ -162,7 +162,7 @@ class Controller
                 "insert into project_runningGame (game_id, set_id, host) values (?, ?, ?);",
                 "iis",
                 $pin,
-                3,
+                1,
                 $_SESSION["user"]
             );
             $_SESSION["pin"] = $pin;
