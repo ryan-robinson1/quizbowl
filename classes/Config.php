@@ -5,7 +5,7 @@ class Config
     // public static $db = [
     //     "host" => "localhost",
     //     "user" => "root",
-    //     "pass" => "yZNQ2tBXvW1s",
+    //     "pass" => "",
     //     "database" => "jww2rfe"
     // ];
     public static $db = [
