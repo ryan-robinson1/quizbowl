@@ -117,7 +117,7 @@
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item">
                                             <!-- <?php echo $question["question_number"] ?> -->
-                                            <a class="btn btn-lg btn-danger" type="button" href="?command=delete_question&?qid= <?php echo $question["question_id"];?>">
+                                            <a class="btn btn-lg btn-danger" type="button" href="?command=delete_question&qid=<?php echo $question["question_id"];?>">
                                                 Delete
                                             </a>
                                         </li>

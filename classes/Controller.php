@@ -217,13 +217,14 @@ class Controller
     public function deletequestion() {
         $error_msg = "";
         if(isset($_GET["qid"])) {
-            $game = $this->db->query("drop * from project_question where question_id = ?;", "i", $_GET["qid"]);
+            $game = $this->db->query("delete from project_question where question_id = ?;", "i", $_GET["qid"]);
             if ($game === false) {
                 $error_msg = "Could not delete question";
             }
+            header("Location: ?command=quizzes");
         }
 
-        header("Location: ?command=quizzes");
+       
     }
 
     public function login()
