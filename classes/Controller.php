@@ -161,7 +161,7 @@ class Controller
     {
         $user_game_num =  $this->db->query("select * from project_runningGame where host = ?;", "s", $_SESSION["user"]);
         if (count($user_game_num) <= 0) {
-            $host = true; 
+            $_SESSION["host"] = true; 
             $pin = rand(10000, 99999);
             $result =  $this->db->query("select * from project_runningGame where game_id = ?;", "i", $pin);
             while (count($result) > 0) {
@@ -231,7 +231,7 @@ class Controller
             if ($game === false) {
                 $error_msg = "Could not delete question";
             }
-            header("Location: ?command=quizzes");
+            header("Location: ?command=quizzes&sid=" . $_GET['sid']);
         }  
     }
 
@@ -282,11 +282,11 @@ class Controller
             );
             if ($res === false) {
                 $error_msg = "<div class='alert alert-danger'>Error inserting new question</div>";
-                include("templates/new_set.php");
+                // include("templates/new_set.php");
                 return;
             }
         }
-        header("Location: ?command=quizzes&sid=" . $_POST['sid']);
+        // header("Location: ?command=quizzes&sid=" . $_POST['sid']);
     }
 
     public function login()

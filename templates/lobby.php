@@ -76,7 +76,7 @@
          </div>
       </div>
    </div>
-   <?php if(isset($host) && $host==true): ?>
+   <?php if(isset($_SESSION["host"]) && $_SESSION["host"]==true): ?>
    <div class="container">
       <div class="row p-5">
          <form action="?command=in_session" method="post">
