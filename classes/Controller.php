@@ -286,7 +286,7 @@ class Controller
                 return;
             }
         }
-        header("Location: ?command=quizzes");
+        header("Location: ?command=quizzes&sid=" . $_POST['sid']);
     }
 
     public function login()

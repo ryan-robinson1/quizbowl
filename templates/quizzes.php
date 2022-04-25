@@ -228,7 +228,7 @@
                                                     <textarea class="form-control" name="answer1" rows=1 placeholder="Type answer option here" required></textarea>
                                                 <div>
                                                 <div class="col">
-                                                    <input class="form-check-input" type="radio" name="correct_answer">
+                                                    <input class="form-check-input" type="radio" name="correct_answer" value="1" required>
                                                 </div>                     
                                             </li>
                                             <li>
@@ -236,7 +236,7 @@
                                                     <textarea class="form-control" name="answer2" rows=1 placeholder="Type answer option here" required></textarea>
                                                 <div>
                                                 <div class="col">
-                                                    <input class="form-check-input" type="radio" name="correct_answer" required>
+                                                    <input class="form-check-input" type="radio" name="correct_answer" value="2" >
                                                 </div>  
                                             </li>
                                             <li>
@@ -244,7 +244,7 @@
                                                     <textarea class="form-control" name="answer3" rows=1 placeholder="Type answer option here" required></textarea>
                                                 <div>
                                                 <div class="col">
-                                                    <input class="form-check-input" type="radio" name="correct_answer">
+                                                    <input class="form-check-input" type="radio" name="correct_answer" value="3">
                                                 </div>   
                                             </li>
                                             <li> 
@@ -252,7 +252,7 @@
                                                     <textarea class="form-control" name="answer4" rows=1 placeholder="Type answer option here" required></textarea>
                                                 <div>
                                                 <div class="col">
-                                                    <input class="form-check-input" type="radio" name="correct_answer">
+                                                    <input class="form-check-input" type="radio" name="correct_answer" value="4">
                                                 </div>  
                                             </li>
                                         </ul>
