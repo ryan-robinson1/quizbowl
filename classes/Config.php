@@ -12,7 +12,7 @@ class Config
         "host" => "localhost",
         "user" => "root",
         "pass" => "",
-        "database" => "quizbowl"
+        "database" => "webpl"
     ];
 }
 // If your code is running on XAMPP, you'll need to connect to your local database.  That should be the following:

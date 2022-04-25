@@ -18,7 +18,9 @@
         </script>
     <script type="text/javascript">
         new_questions = [];
-        function Question(question, num, answer1, answer2, answer3, answer4, correct) {
+        id = 0;
+        function Question(qid, question, num, answer1, answer2, answer3, answer4, correct) {
+            this.id = qid;
             this.question = question;
             this.num = num;
             this.answer1 = answer1;
@@ -38,30 +40,34 @@
                 var a4 = $("#a4").val();
                 var qn = $("#qnum").val();
                 var c = $("input[name='correct_answer']:checked").val() // from https://stackoverflow.com/questions/596351/how-can-i-know-which-radio-button-is-selected-via-jquery
-                if(q == "" || a1 == "" || a2 == "" || a3 == "" || a4 == "" || qnum == "" || qn == "") {
+                if(q == "" || a1 == "" || a2 == "" || a3 == "" || a4 == "" || qnum == "" || qn == "" || c === undefined) {
                     $("#newq_alert").show();
-                    // show error message here
                 }
                 else {
                     $("#newq_alert").hide();
-                    var newq = new Question(q, qn, a1, a2, a3, a4, c);
+                    var newq = new Question(id, q, qn, a1, a2, a3, a4, c);
                     new_questions.push(newq);
 
                     var qlist = $("#list_of_questions");
-                    $("<li class='list-group-item py-0 border-0'><div class='container'><div class='row'><div class='card col-md-2 p-0 border-0'><div class='card-body p-5 border border-3 rounded'><ul class='list-group list-group-flush'><li class='list-group-item'><a class='btn btn-lg btn-danger' type='button' id='newq_delete" + new_questions.length + "'>Delete</a></li></ul></div></div><div class='card col-md-5 p-0 border-0'><div class='card-body p-5 border border-3 rounded'><ul class='list-group list-group-flush'><li class='list-group-item' id='newq_question" + new_questions.length + "'> </li></ul></div></div><div class='card col-md-5 p-0 border-0'><div class='card-body p-5 border border-3 rounded'><ul class='list-group list-group-flush'><li class='list-group-item'><ul><li id='newq_a1" + new_questions.length +"'></li><li id='newq_a2"+ new_questions.length +"'></li><li id='newq_a3"+ new_questions.length +"'></li><li id='newq_a4"+ new_questions.length +"'> </li></ul></li></ul></div></div></div></div></li>")
+                    $("<li class='list-group-item py-0 border-0' id='lid" + id + "'><div class='container'><div class='row'><div class='card col-md-2 p-0 border-0'><div class='card-body p-5 border border-3 rounded'><a class='btn btn-lg btn-danger' type='button' id='newq_delete" + id + "'>Delete</a></div></div><div class='card col-md-5 p-0 border-0'><div class='card-body p-5 border border-3 rounded'><ul class='list-group list-group-flush'><li class='list-group-item' id='newq_question" + id + "'> </li></ul></div></div><div class='card col-md-5 p-0 border-0'><div class='card-body p-5 border border-3 rounded'><ul class='list-group list-group-flush'><li class='list-group-item'><ul><li id='newq_a1" + id +"'></li><li id='newq_a2"+ id +"'></li><li id='newq_a3"+ id +"'></li><li id='newq_a4"+ id +"'> </li></ul></li></ul></div></div></div></div></li>")
                     .insertBefore("#newq_form");
 
-                    $("#newq_question" + new_questions.length).text(q);
-                    $("#newq_a1" + new_questions.length).text(a1);
-                    $("#newq_a2" + new_questions.length).text(a2);
-                    $("#newq_a3" + new_questions.length).text(a3);
-                    $("#newq_a4" + new_questions.length).text(a4);
+                    $("#newq_question" + id).text(q);
+                    $("#newq_a1" + id).text(a1);
+                    $("#newq_a2" + id).text(a2);
+                    $("#newq_a3" + id).text(a3);
+                    $("#newq_a4" + id).text(a4);
+                    $("#newq_a" + c + "" + id + "").css("font-weight","Bold");
 
-                    $("#newq_delete" + new_questions.length).click(function() {
-                        var index = $(this).attr('id').substring(11);
-                        new_questions.splice(index-1, 1);
-                        index = -1 - index; 
-                        $("#list_of_questions > li:eq(" + index + ")").remove();
+                    $("#newq_delete" + id).click(function() {
+                        var qid = $(this).attr('id').substring(11);
+                        new_questions.forEach(function(element, index) {
+                            if(element.id == qid) {
+                                new_questions.splice(index, 1); 
+                            }
+                        });
+                        $("#lid" + qid).remove();
+                        // $("#list_of_questions > li:eq(" + lindex + ")").remove();
                     });
 
                     $("#question").val("");
@@ -71,6 +77,7 @@
                     $("#a4").val("");
                     $("#qnum").val("");
                     $("input[name='correct_answer']:checked").prop('checked', false);
+                    id++;
                 }
 
             });
@@ -205,13 +212,9 @@
                         <div class="row">
                             <div class="card col-md-2 p-0 border-0">
                                 <div class="card-body p-5 border border-3 rounded">
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item">
-                                            <a class="btn btn-lg btn-danger" type="button" href="?command=delete_question&qid=<?php echo $question["question_id"];?>&sid=<?php if(isset($_GET["sid"])) echo $_GET["sid"]; else echo "-1";?>">
-                                                Delete
-                                            </a>
-                                        </li>
-                                    </ul>
+                                    <a class="btn btn-lg btn-danger" type="button" href="?command=delete_question&qid=<?php echo $question["question_id"];?>&sid=<?php if(isset($_GET["sid"])) echo $_GET["sid"]; else echo "-1";?>">
+                                        Delete
+                                    </a>
                                 </div>
                             </div>
                             <div class="card col-md-5 p-0 border-0">
@@ -268,19 +271,13 @@
         <?php if(isset($_GET["sid"])): ?>
         <li class="list-group-item py-0 border-0" id="newq_form">
             <div class="container">
-                <!-- <form action="?command=add_question" method="post"> -->
                     <div class="row">
                         <div class="card col-md-2 p-0 border-0">
                             <div class="card-body p-5 border border-3 rounded">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">
-                                        <button class="btn btn-lg btn-primary" id="newq">
-                                            Add question
-                                        </button>  
-                                        <div class='alert alert-danger' id="newq_alert">Error: Please fill out all fields</div>"
-                                        <!-- <input type="hidden" name = "sid" value="<?php if(isset($_GET["sid"])) echo $_GET["sid"]; else echo "-1";?>"> -->
-                                    </li>
-                                </ul>
+                                <button class="btn btn-lg btn-primary" id="newq">
+                                     Add question
+                                </button>  
+                                <div class='alert alert-danger' id="newq_alert">Error: Fill out all fields</div>
                             </div>
                         </div>
                         <div class="card col-md-5 p-0 border-0">
