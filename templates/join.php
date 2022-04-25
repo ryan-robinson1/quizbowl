@@ -20,7 +20,8 @@
                     <form action="?command=join" method="post">
                         <div class="form-group">
                             <label for="number"><span>Game PIN</span></label>
-                            <input type="number" class="form-control" id="number" name="pin">
+                            <input type="number" class="form-control" id="pin" name="pin">
+                            <alert id = "pin_message"></alert>
                         </div>
                         <div class="form-group">
                             <label for="number"><span>Username</span></label>
@@ -36,6 +37,14 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        document.getElementById("pin").addEventListener("keyup", function() {
+            if(this.value < 10000 || this.value > 99999) {
+                document.getElementById("pin_message").textContent = "Please enter a 5-digit game PIN";
+            }
+            else document.getElementById("pin_message").textContent = "";
+        });
+    </script>
 </body>
 
 </html>
