@@ -14,7 +14,7 @@
 <body>
     <div class="container" style="margin-top: 15px;">
         <div class="row justify-content-center">
-            <div class="card" style="height:350px">
+            <div class="card" style="height:400px">
                 <div class="card-body">
                     <h1 style="text-align:center">QuizBowl</h1>
                     <form action="?command=join" method="post">
@@ -28,7 +28,7 @@
                             <input type="text" class="form-control" id="name" name="name">
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary" style="background-color: purple !important;"><span>Join</span></button>
+                            <button type="submit" class="btn btn-primary" id = "submitbutton" style="background-color: purple !important;"><span>Join</span></button>
                         </div>
 
                     </form>
@@ -41,8 +41,13 @@
         document.getElementById("pin").addEventListener("keyup", function() {
             if(this.value < 10000 || this.value > 99999) {
                 document.getElementById("pin_message").textContent = "Please enter a 5-digit game PIN";
+                document.getElementById("submitbutton").disabled = true;
             }
-            else document.getElementById("pin_message").textContent = "";
+            else {
+                document.getElementById("pin_message").textContent = "";
+                document.getElementById("submitbutton").disabled = false;
+
+            }
         });
     </script>
 </body>

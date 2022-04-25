@@ -9,27 +9,40 @@
     <title>Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <link rel="stylesheet" href="css/login.css">
+    <script type="text/javascript">
+        function validate() {
+            var pw = document.getElementById("password").value;
+            if(pw.length < 8) {
+                document.getElementById("password_alert").textContent = "Please make password at least 8 characters long";
+                document.getElementById("submitbutton").setAttribute("disabled", true);
+            }
+            else {
+                document.getElementById("password_alert").textContent = "";
+                document.getElementById("submitbutton").disabled = false;
+            }
+        }
+    </script>
 </head>
 
 <body>
     <div class="container" style="margin-top: 15px;">
         <div class="row justify-content-center">
-            <div class="card">
+            <div class="card" style="height: 400px">
                 <div class="card-body">
                     <h1 style="text-align:center">QuizBowl</h1>
                     <form action="?command=login_" method="post">
                         <div class="form-group">
                             <label for="exampleInputPassword1"><span>Username</span></label>
-                            <input type="text" class="form-control" id="Username" name="user">
+                            <input type="text" class="form-control" id="username" name="user">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1"><span>Password</span></label>
-                            <input type="password" class="form-control" id="Password" name="password">
+                            <input type="password" class="form-control" id="password" name="password" onkeyup="validate();">
+                            <div class='alert' id="password_alert"></div>
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary" style="background-color: purple !important;"><span>Log In</span></button>
+                            <button type="submit" class="btn btn-primary" id="submitbutton" style="background-color: purple !important; margin-top: 0px;"><span>Log In</span></button>
                         </div>
-
                     </form>
                 </div>
             </div>
