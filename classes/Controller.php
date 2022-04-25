@@ -40,6 +40,12 @@ class Controller
             case "delete_question":
                 $this->deletequestion();
                 break;
+            case "add_question":
+                $this->addquestion();
+                break;
+            case "delete_set":
+                $this->deleteset();
+                break;
             case "logout_player":
                 $this->logout_player();
                 break;
@@ -51,8 +57,11 @@ class Controller
     }
     public function logout()
     {
-        $this->db->query("delete from project_player where game_id=?;", "s", $_SESSION["pin"]);
-        $this->db->query("delete from project_runningGame where host=?;", "s", $_SESSION["user"]);
+        if(isset($_SESSION["pin"]))
+            $this->db->query("delete from project_player where game_id=?;", "s", $_SESSION["pin"]);
+            
+        if(isset($_SESSION["user"]))
+            $this->db->query("delete from project_runningGame where host=?;", "s", $_SESSION["user"]);
         session_unset();
         session_destroy();
     }
@@ -152,6 +161,7 @@ class Controller
     {
         $user_game_num =  $this->db->query("select * from project_runningGame where host = ?;", "s", $_SESSION["user"]);
         if (count($user_game_num) <= 0) {
+            $host = true; 
             $pin = rand(10000, 99999);
             $result =  $this->db->query("select * from project_runningGame where game_id = ?;", "i", $pin);
             while (count($result) > 0) {
@@ -162,7 +172,7 @@ class Controller
                 "insert into project_runningGame (game_id, set_id, host) values (?, ?, ?);",
                 "iis",
                 $pin,
-                1,
+                $_POST["sid"],
                 $_SESSION["user"]
             );
             $_SESSION["pin"] = $pin;
@@ -204,7 +214,7 @@ class Controller
                 if ($insert === false) {
                     $error_msg = "Duplicate user";
                 } else {
-                    header("Location: ?command=playgame");
+                    header("Location: ?command=startgame");
                 }
             }
         }
@@ -222,9 +232,61 @@ class Controller
                 $error_msg = "Could not delete question";
             }
             header("Location: ?command=quizzes");
-        }
+        }  
+    }
 
+    public function deleteset() {
+        $error_msg = "";
+        if(isset($_POST["sid"])) {
+            $sid = $_POST["sid"];
+            if($sid == -1 ) {
+                $error_msg = "Select question set to delete";
+            }
+            else {
+                $res = $this->db->query("delete from project_runningGame where set_id = ?;", "i", $sid);
+                if ($res === false) {
+                    $error_msg = "Could not delete question set";
+                }
+                $res = $this->db->query("delete from project_question where set_id = ?;", "i", $sid);
+                if ($res === false) {
+                    $error_msg = "Could not delete question set";
+                }
+                $res = $this->db->query("delete from project_questionSet where set_id = ?;", "i", $sid);
+                if ($res === false) {
+                    $error_msg = "Could not delete question set";
+                }                
+            }
+        }
+        header("Location: ?command=quizzes");
+        // include("templates/quizzes.php");
        
+    }
+
+    public function addquestion() {
+        $error_msg = "";
+        if(isset($_POST["sid"]) && isset($_POST["question"]) && isset($_POST["answer1"]) && isset($_POST["answer2"]) && isset($_POST["answer3"]) && isset($_POST["answer4"]) 
+        && isset($_POST["correct_answer"]) && isset($_POST["qnum"])) {
+            $res = $this->db->query(
+                "insert into project_question(
+                    set_id, question, question_number, answer1, answer2, answer3, answer4, correct_answer)
+                    values (?, ?, ?, ?, ?, ?, ?, ?)",
+                "isissssi",
+                $_POST["sid"],
+                $_POST["question"],
+                $_POST["qnum"],
+                $_POST["answer1"],
+                $_POST["answer2"],
+                $_POST["answer3"],
+                $_POST["answer4"],
+                $_POST["correct_answer"]
+            );
+            if ($res === false) {
+                $error_msg = "<div class='alert alert-danger'>Error inserting new question</div>";
+                include("templates/new_set.php");
+                return;
+            }
+        }
+        header("Location: ?command=quizzes");
     }
 
     public function login()

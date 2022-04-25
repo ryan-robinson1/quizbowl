@@ -44,10 +44,24 @@
     </div>
     <?php echo $error_msg; ?>
 
+    <div class="container text-center">
+            <form action="?command=startgame" method="post" style="display: inline;">
+                <button type="submit" class="btn btn-lg btn-success">Host Quiz!</button>
+                <input type="hidden" id="sid" name="sid" value ="<?php if(isset($_GET["sid"])) echo $_GET["sid"]; else echo "-1";?>">
+            </form>
+    </div>
     <div class="container">
         <div class="dropdown p-4 text-center">
+            
             <button class="btn btn-lg btn-secondary bg-purple dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                Select set
+                <?php if(isset($_GET["sid"])) {
+                        foreach($sets_list as $set) {
+                            if($set["set_id"] == $_GET["sid"])
+                            echo $set["set_name"];
+                        }
+                    }
+                    else echo "Select set"; 
+                ?>
             </button>
 
 
@@ -57,12 +71,12 @@
                 <?php endforeach; ?>
 
             </ul>
-
-            <form action="?command=startgame" method="post" style="display: inline;">
-                <button type="submit" class="btn btn-lg btn-success">Host Quiz!</button>
+            <form action="?command=delete_set" method="post" style="display: inline;">
+                <button class="btn btn-lg btn-danger" type="submit">
+                    Delete Question Set!
+                </button>
+                <input type="hidden" name = "sid" value="<?php if(isset($_GET["sid"])) echo $_GET["sid"]; else echo "-1";?>">
             </form>
-
-
             <form action="?command=makequiz" method="post" style="display: inline;">
                 <button class="btn btn-lg btn-secondary" type="submit">
                     Make Question Set!
@@ -175,6 +189,82 @@
 
         <?php endforeach;
         } ?>
+        <?php if(isset($_GET["sid"])): ?>
+        <li class="list-group-item py-0 border-0">
+            <div class="container">
+                <form action="?command=add_question" method="post">
+                    <div class="row">
+                        <div class="card col-md-2 p-0 border-0">
+                            <div class="card-body p-5 border border-3 rounded">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <button class="btn btn-lg btn-primary" type="submit">
+                                            Add question
+                                        </button>  
+                                        <input type="hidden" name = "sid" value="<?php if(isset($_GET["sid"])) echo $_GET["sid"]; else echo "-1";?>">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card col-md-5 p-0 border-0">
+                            <div class="card-body p-5 border border-3 rounded">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <textarea class="form-control" name="question" rows=6 placeholder="Type question here" required></textarea>
+                                        <label for="category" class="form-label">Question number</label>
+                                            <input type="qnum" class="form-control" id="category" name="qnum" required />
+                                        <!-- id="s<?php echo $selected_set ?>_q<?php echo $question["question_id"];?>" -->
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card col-md-5 p-0 border-0">
+                            <div class="card-body p-5 border border-3 rounded">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <ul>
+                                            <li>
+                                                <div class="col">
+                                                    <textarea class="form-control" name="answer1" rows=1 placeholder="Type answer option here" required></textarea>
+                                                <div>
+                                                <div class="col">
+                                                    <input class="form-check-input" type="radio" name="correct_answer">
+                                                </div>                     
+                                            </li>
+                                            <li>
+                                                <div class="col">
+                                                    <textarea class="form-control" name="answer2" rows=1 placeholder="Type answer option here" required></textarea>
+                                                <div>
+                                                <div class="col">
+                                                    <input class="form-check-input" type="radio" name="correct_answer" required>
+                                                </div>  
+                                            </li>
+                                            <li>
+                                                <div class="col">
+                                                    <textarea class="form-control" name="answer3" rows=1 placeholder="Type answer option here" required></textarea>
+                                                <div>
+                                                <div class="col">
+                                                    <input class="form-check-input" type="radio" name="correct_answer">
+                                                </div>   
+                                            </li>
+                                            <li> 
+                                                <div class="col">
+                                                    <textarea class="form-control" name="answer4" rows=1 placeholder="Type answer option here" required></textarea>
+                                                <div>
+                                                <div class="col">
+                                                    <input class="form-check-input" type="radio" name="correct_answer">
+                                                </div>  
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </li>
+        <?php endif; ?>
     </ul>
     <!--for spacing at bottom of screen-->
     <div class="p-5"></div>
