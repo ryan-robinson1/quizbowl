@@ -12,18 +12,95 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="css/sets.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+                integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+                crossorigin="anonymous">
+        </script>
+    <script type="text/javascript">
+        new_questions = [];
+        function Question(question, num, answer1, answer2, answer3, answer4, correct) {
+            this.question = question;
+            this.num = num;
+            this.answer1 = answer1;
+            this.answer2 = answer2;
+            this.answer3 = answer3;
+            this.answer4 = answer4;
+            this.correct = correct;
+        }
+
+        $(document).ready(function() {
+            $("#newq_alert").hide();
+            $("#newq").click(function() {
+                var q = $("#question").val();
+                var a1 = $("#a1").val();
+                var a2 = $("#a2").val();
+                var a3 = $("#a3").val();
+                var a4 = $("#a4").val();
+                var qn = $("#qnum").val();
+                var c = $("input[name='correct_answer']:checked").val() // from https://stackoverflow.com/questions/596351/how-can-i-know-which-radio-button-is-selected-via-jquery
+                if(q == "" || a1 == "" || a2 == "" || a3 == "" || a4 == "" || qnum == "" || qn == "") {
+                    $("#newq_alert").show();
+                    // show error message here
+                }
+                else {
+                    $("#newq_alert").hide();
+                    var newq = new Question(q, qn, a1, a2, a3, a4, c);
+                    new_questions.push(newq);
+
+                    var qlist = $("#list_of_questions");
+                    $("<li class='list-group-item py-0 border-0'><div class='container'><div class='row'><div class='card col-md-2 p-0 border-0'><div class='card-body p-5 border border-3 rounded'><ul class='list-group list-group-flush'><li class='list-group-item'><a class='btn btn-lg btn-danger' type='button' id='newq_delete" + new_questions.length + "'>Delete</a></li></ul></div></div><div class='card col-md-5 p-0 border-0'><div class='card-body p-5 border border-3 rounded'><ul class='list-group list-group-flush'><li class='list-group-item' id='newq_question" + new_questions.length + "'> </li></ul></div></div><div class='card col-md-5 p-0 border-0'><div class='card-body p-5 border border-3 rounded'><ul class='list-group list-group-flush'><li class='list-group-item'><ul><li id='newq_a1" + new_questions.length +"'></li><li id='newq_a2"+ new_questions.length +"'></li><li id='newq_a3"+ new_questions.length +"'></li><li id='newq_a4"+ new_questions.length +"'> </li></ul></li></ul></div></div></div></div></li>")
+                    .insertBefore("#newq_form");
+
+                    $("#newq_question" + new_questions.length).text(q);
+                    $("#newq_a1" + new_questions.length).text(a1);
+                    $("#newq_a2" + new_questions.length).text(a2);
+                    $("#newq_a3" + new_questions.length).text(a3);
+                    $("#newq_a4" + new_questions.length).text(a4);
+
+                    $("#newq_delete" + new_questions.length).click(function() {
+                        var index = $(this).attr('id').substring(11);
+                        new_questions.splice(index-1, 1);
+                        index = -1 - index; 
+                        $("#list_of_questions > li:eq(" + index + ")").remove();
+                    });
+
+                    $("#question").val("");
+                    $("#a1").val("");
+                    $("#a2").val("");
+                    $("#a3").val("");
+                    $("#a4").val("");
+                    $("#qnum").val("");
+                    $("input[name='correct_answer']:checked").prop('checked', false);
+                }
+
+            });
+
+            $(window).on("unload", function() {
+                new_questions.forEach(function(element) {
+                    $.post("index.php?command=add_question", 
+                    { 
+                        sid: $("#sid").val(),
+                        question: element.question,
+                        qnum: element.num,
+                        answer1: element.answer1,
+                        answer2: element.answer2,
+                        answer3: element.answer3,
+                        answer4: element.answer4,
+                        correct_answer: element.correct
+                    }, function(data) {
+                        console.log(data);
+                    }, "text"
+                    );
+                });
+            });
+        });
+    </script>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <!-- <li class="nav-item px-4">
-                    <a class="nav-link active" href="index.html">Home</a>
-                </li>
-                <li class="nav-item px-4">
-                    <a class="nav-link active" href="sets.html">Question sets</a>
-                </li> -->
             </ul>
 
             <div class="btn-group">
@@ -44,10 +121,24 @@
     </div>
     <?php echo $error_msg; ?>
 
+    <div class="container text-center">
+            <form action="?command=startgame" method="post" style="display: inline;">
+                <button type="submit" class="btn btn-lg btn-success">Host Quiz!</button>
+                <input type="hidden" id="sid" name="sid" value ="<?php if(isset($_GET["sid"])) echo $_GET["sid"]; else echo "-1";?>">
+            </form>
+    </div>
     <div class="container">
         <div class="dropdown p-4 text-center">
+            
             <button class="btn btn-lg btn-secondary bg-purple dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                Select set
+                <?php if(isset($_GET["sid"])) {
+                        foreach($sets_list as $set) {
+                            if($set["set_id"] == $_GET["sid"])
+                            echo $set["set_name"];
+                        }
+                    }
+                    else echo "Select set"; 
+                ?>
             </button>
 
 
@@ -57,12 +148,12 @@
                 <?php endforeach; ?>
 
             </ul>
-
-            <form action="?command=startgame" method="post" style="display: inline;">
-                <button type="submit" class="btn btn-lg btn-success">Host Quiz!</button>
+            <form action="?command=delete_set" method="post" style="display: inline;">
+                <button class="btn btn-lg btn-danger" type="submit">
+                    Delete Question Set!
+                </button>
+                <input type="hidden" id = "sid" name = "sid" value="<?php if(isset($_GET["sid"])) echo $_GET["sid"]; else echo "-1";?>">
             </form>
-
-
             <form action="?command=makequiz" method="post" style="display: inline;">
                 <button class="btn btn-lg btn-secondary" type="submit">
                     Make Question Set!
@@ -71,7 +162,7 @@
         </div>
     </div>
 
-    <ul class="list-group">
+    <ul class="list-group" id = "list_of_questions">
         <li class="list-group-item py-0 border-0">
             <div class="container">
                 <div class="row">
@@ -116,8 +207,7 @@
                                 <div class="card-body p-5 border border-3 rounded">
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item">
-                                            <!-- <?php echo $question["question_number"] ?> -->
-                                            <a class="btn btn-lg btn-danger" type="button" href="?command=delete_question&?qid= <?php echo $question["question_id"];?>">
+                                            <a class="btn btn-lg btn-danger" type="button" href="?command=delete_question&qid=<?php echo $question["question_id"];?>&sid=<?php if(isset($_GET["sid"])) echo $_GET["sid"]; else echo "-1";?>">
                                                 Delete
                                             </a>
                                         </li>
@@ -175,6 +265,81 @@
 
         <?php endforeach;
         } ?>
+        <?php if(isset($_GET["sid"])): ?>
+        <li class="list-group-item py-0 border-0" id="newq_form">
+            <div class="container">
+                <!-- <form action="?command=add_question" method="post"> -->
+                    <div class="row">
+                        <div class="card col-md-2 p-0 border-0">
+                            <div class="card-body p-5 border border-3 rounded">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <button class="btn btn-lg btn-primary" id="newq">
+                                            Add question
+                                        </button>  
+                                        <div class='alert alert-danger' id="newq_alert">Error: Please fill out all fields</div>"
+                                        <!-- <input type="hidden" name = "sid" value="<?php if(isset($_GET["sid"])) echo $_GET["sid"]; else echo "-1";?>"> -->
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card col-md-5 p-0 border-0">
+                            <div class="card-body p-5 border border-3 rounded">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <textarea class="form-control" name="question" id="question" rows=6 placeholder="Type question here" required></textarea>
+                                        <label for="category" class="form-label">Question number</label>
+                                        <input type="number" class="form-control" id="qnum" name="qnum" required />
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card col-md-5 p-0 border-0">
+                            <div class="card-body p-5 border border-3 rounded">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <ul>
+                                            <li>
+                                                <div class="col">
+                                                    <textarea class="form-control" name="answer1" id="a1" rows=1 placeholder="Type answer option here" required></textarea>
+                                                <div>
+                                                <div class="col">
+                                                    <input class="form-check-input" type="radio" name="correct_answer" value="1" required>
+                                                </div>                     
+                                            </li>
+                                            <li>
+                                                <div class="col">
+                                                    <textarea class="form-control" name="answer2" id="a2" rows=1 placeholder="Type answer option here" required></textarea>
+                                                <div>
+                                                <div class="col">
+                                                    <input class="form-check-input" type="radio" name="correct_answer" value="2" >
+                                                </div>  
+                                            </li>
+                                            <li>
+                                                <div class="col">
+                                                    <textarea class="form-control" name="answer3" id="a3" rows=1 placeholder="Type answer option here" required></textarea>
+                                                <div>
+                                                <div class="col">
+                                                    <input class="form-check-input" type="radio" name="correct_answer" value="3">
+                                                </div>   
+                                            </li>
+                                            <li> 
+                                                <div class="col">
+                                                    <textarea class="form-control" name="answer4" id="a4" rows=1 placeholder="Type answer option here" required></textarea>
+                                                <div>
+                                                <div class="col">
+                                                    <input class="form-check-input" type="radio" name="correct_answer" value="4">
+                                                </div>  
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </li>
+        <?php endif; ?>
     </ul>
     <!--for spacing at bottom of screen-->
     <div class="p-5"></div>
