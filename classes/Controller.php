@@ -43,11 +43,23 @@ class Controller
             case "logout_player":
                 $this->logout_player();
                 break;
+            case "get_players":
+                $this->get_players();
+                break;
             case "logout":
                 $this->logout();
             default:
                 $this->start();
         }
+    }
+    public function get_players()
+    {
+        $_SESSION["blue_players"] = $this->db->query("select * from project_player where game_id = ? and team = ?;", "is", $_SESSION["pin"], "0");
+        $_SESSION["red_players"] = $this->db->query("select * from project_player where game_id = ? and team = ?;", "is", $_SESSION["pin"], "1");
+        echo json_encode(array(
+            $_SESSION["blue_players"],
+            $_SESSION["red_players"],
+        ));
     }
     public function logout()
     {
@@ -64,10 +76,6 @@ class Controller
     }
     public function in_session()
     {
-        echo json_encode(array(
-            $_SESSION["blue_players"],
-            $_SESSION["red_players"],
-        ));
     }
     public function quizzes()
     {
@@ -214,9 +222,10 @@ class Controller
     }
 
 
-    public function deletequestion() {
+    public function deletequestion()
+    {
         $error_msg = "";
-        if(isset($_GET["qid"])) {
+        if (isset($_GET["qid"])) {
             $game = $this->db->query("drop * from project_question where question_id = ?;", "i", $_GET["qid"]);
             if ($game === false) {
                 $error_msg = "Could not delete question";

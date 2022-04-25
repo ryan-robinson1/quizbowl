@@ -11,6 +11,7 @@
    <meta name="keywords" content="school project">
 
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
    <link rel="stylesheet" href="css/lobby.css">
 </head>
 
@@ -50,12 +51,12 @@
                   Blue Team
                </h3>
 
-               <ul class="list-group list-group-flush">
-                  <?php foreach ($_SESSION["blue_players"] as $player) : ?>
+               <ul class="list-group list-group-flush" id="blue_players">
+                  <!-- <?php foreach ($_SESSION["blue_players"] as $player) : ?>
                      <li class="list-group-item">
                         <?= $player["username"] ?>
                      </li>
-                  <?php endforeach; ?>
+                  <?php endforeach; ?> -->
                </ul>
             </div>
          </div>
@@ -65,12 +66,12 @@
                <h3 class="card-title bg-danger text-light p-3">
                   Red Team
                </h3>
-               <ul class="list-group list-group-flush">
-                  <?php foreach ($_SESSION["red_players"] as $player) : ?>
+               <ul class="list-group list-group-flush" id="red_players">
+                  <!-- <?php foreach ($_SESSION["red_players"] as $player) : ?>
                      <li class="list-group-item">
                         <?= $player["username"] ?>
                      </li>
-                  <?php endforeach; ?>
+                  <?php endforeach; ?> -->
                </ul>
             </div>
          </div>
@@ -89,6 +90,52 @@
    </div>
 
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+   <script type="text/javascript">
+      var players = null;
+      var red = [];
+      var blue = [];
+      getPlayers();
+
+      function getPlayers() {
+         var ajax = new XMLHttpRequest();
+         ajax.open("GET", "?command=get_players", true);
+         ajax.responseType = "json";
+         ajax.send(null);
+         ajax.addEventListener("load", function() {
+            if (this.status == 200) { // worked 
+               players = JSON.parse(JSON.stringify(this.response));
+               // console.log(players);
+               updateLobby();
+            }
+         });
+
+         // What happens on error
+         ajax.addEventListener("error", function() {
+            console.log("error");
+         })
+      }
+
+      function updateLobby() {
+
+         for (let p of players[0]) {
+            if (!blue.includes(p["username"])) {
+               $("#blue_players").append("<li class='list-group-item'>" + p["username"] + "</li>");
+               blue.push(p["username"])
+            }
+
+         }
+         for (let p of players[1]) {
+            if (!red.includes(p["username"])) {
+               $("#red_players").append("<li class='list-group-item'>" + p["username"] + "</li>");
+               red.push(p["username"])
+            }
+         }
+
+      }
+      window.setInterval(function() {
+         getPlayers();
+      }, 2000);
+   </script>
 </body>
 
 </html>
