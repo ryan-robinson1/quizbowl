@@ -85,6 +85,16 @@ class Controller
     }
     public function in_session()
     {
+        //TODO: We need to pop off a question from the question session array when we are done with it
+        if (count($_SESSION["questions"]) < 1) {
+            //TODO: Transition to end game screen
+        }
+        $question = $_SESSION["questions"][0];
+        $pin = $_SESSION["pin"];
+
+
+
+        include("templates/game.php");
     }
     public function quizzes()
     {
@@ -184,8 +194,9 @@ class Controller
                 $_SESSION["user"]
             );
             $_SESSION["pin"] = $pin;
-            $_SESSION["set_id"] = 3;
+            $_SESSION["set_id"] = $_POST["sid"];
         }
+        $_SESSION["questions"] = $this->db->query("select * from project_question where set_id = ?", "i", 1);
         $_SESSION["blue_players"] = $this->db->query("select * from project_player where game_id = ? and team = ?;", "is", $_SESSION["pin"], "0");
         $_SESSION["red_players"] = $this->db->query("select * from project_player where game_id = ? and team = ?;", "is", $_SESSION["pin"], "1");
         include("templates/lobby.php");

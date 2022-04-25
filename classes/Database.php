@@ -43,7 +43,8 @@ class Database
         return true;
     }
 
-    public function getLastInsertedID() {
+    public function getLastInsertedID()
+    {
         return $this->mysqli->insert_id;
     }
 }
