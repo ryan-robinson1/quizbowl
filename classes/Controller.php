@@ -154,8 +154,8 @@ class Controller
         if (isset($_SESSION["pin"]))
             $this->db->query("delete from project_player where game_id=?;", "s", $_SESSION["pin"]);
 
-        if (isset($_SESSION["user"]))
-            $this->db->query("delete from project_runningGame where host=?;", "s", $_SESSION["user"]);
+        if (isset($_SESSION["username"]))
+            $this->db->query("delete from project_runningGame where host=?;", "s", $_SESSION["username"]);
         include("templates/end_game.php");
     }
     public function roundscore()
@@ -209,8 +209,8 @@ class Controller
         if (isset($_SESSION["pin"]))
             $this->db->query("delete from project_player where game_id=?;", "s", $_SESSION["pin"]);
 
-        if (isset($_SESSION["user"]))
-            $this->db->query("delete from project_runningGame where host=?;", "s", $_SESSION["user"]);
+        if (isset($_SESSION["username"]))
+            $this->db->query("delete from project_runningGame where host=?;", "s", $_SESSION["username"]);
         session_unset();
         session_destroy();
     }
@@ -288,7 +288,7 @@ class Controller
 
         if ($set_name_created) {
             if (isset($_POST["set_name"])) {
-                $res = $this->db->query("insert into project_questionSet(set_name, username) values (?, ?)", "ss", $_POST["set_name"], $_SESSION["user"]);
+                $res = $this->db->query("insert into project_questionSet(set_name, username) values (?, ?)", "ss", $_POST["set_name"], $_SESSION["username"]);
                 if ($res === false) {
                     $error_msg = "<div class='alert alert-danger'>Error inserting new set</div>";
                     include("templates/new_set.php");
@@ -324,10 +324,10 @@ class Controller
     }
     public function startgame()
     {
-        if (isset($_SESSION["user"])) {
-            $user_game_num =  $this->db->query("select * from project_runningGame where host = ?;", "s", $_SESSION["user"]);
+        if (isset($_SESSION["username"])) {
+            $user_game_num =  $this->db->query("select * from project_runningGame where host = ?;", "s", $_SESSION["username"]);
             if (count($user_game_num) <= 0) {
-                $_SESSION["host"] = $_SESSION["user"];
+                $_SESSION["host"] = $_SESSION["username"];
                 $pin = rand(10000, 99999);
                 $result =  $this->db->query("select * from project_runningGame where game_id = ?;", "i", $pin);
                 while (count($result) > 0) {
@@ -339,7 +339,7 @@ class Controller
                     "iis",
                     $pin,
                     $_POST["sid"],
-                    $_SESSION["user"]
+                    $_SESSION["username"]
                 );
                 $_SESSION["pin"] = $pin;
                 $_SESSION["set_id"] = $_POST["sid"];

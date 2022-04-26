@@ -28,7 +28,7 @@
 
             <div class="btn-group">
                 <button type="button" class="btn btn-secondary bg-purple dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="profile-btn">
-                    <?= $_SESSION["user"] ?>
+                    <?= $_SESSION["username"] ?>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="?command=logout">Log Out</a></li>
@@ -38,14 +38,14 @@
     </nav>
 
     <div class="p-5 mb-4 bg-light rounded-3">
-         <?php if($set_name_created == false): ?>
+        <?php if ($set_name_created == false) : ?>
             <div class="container-fluid py-5">
                 <h1 class="display-5 fw-bold text-center">Create a New Set</h1>
             </div>
         <?php endif; ?>
-        <?php if($set_name_created == true): ?>
+        <?php if ($set_name_created == true) : ?>
             <div class="container-fluid py-5">
-                <h1 class="display-5 fw-bold text-center">Add a New Question to <?php echo $_SESSION["current_set_name"];?></h1>
+                <h1 class="display-5 fw-bold text-center">Add a New Question to <?php echo $_SESSION["current_set_name"]; ?></h1>
             </div>
         <?php endif; ?>
     </div>
@@ -55,7 +55,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-4">
-                <?php if($set_name_created == false): ?>
+                <?php if ($set_name_created == false) : ?>
                     <form action="?command=makequiz" method="post">
                         <div class="mb-3">
                             <label for="set_name" class="form-label">New set name</label>
@@ -67,7 +67,7 @@
                         </div>
                     </form>
                 <?php endif; ?>
-                <?php if($set_name_created == true): ?>
+                <?php if ($set_name_created == true) : ?>
                     <form action="?command=makequiz" method="post">
                         <div class="mb-3">
                             <label for="category" class="form-label">Question</label>
