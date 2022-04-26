@@ -156,8 +156,11 @@ class Controller
             $blue_text = "Winner";
             $red_text = "Loser";
         }
+
         if (isset($_SESSION["pin"]))
             $this->db->query("delete from project_player where game_id=?;", "s", $_SESSION["pin"]);
+        
+        $this->db->query("delete from project_timeup where game_id=?;", "s", $_SESSION["pin"]);
 
         if (isset($_SESSION["username"]))
             $this->db->query("delete from project_runningGame where host=?;", "s", $_SESSION["username"]);
