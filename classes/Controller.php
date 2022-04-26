@@ -253,7 +253,7 @@ class Controller
         }
 
         // gets all sets for the user
-        $sets_list = $this->db->query("select set_id, set_name from project_questionSet where username = ?;", "s", $_SESSION["user"]);
+        $sets_list = $this->db->query("select set_id, set_name from project_questionSet where username = ?;", "s", $_SESSION["username"]);
 
         if ($sets_list === false) {
             $error_msg = "<div class='alert alert-danger'>Error getting question sets</div>";
