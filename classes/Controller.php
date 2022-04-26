@@ -34,6 +34,9 @@ class Controller
             case "startgame":
                 $this->startgame();
                 break;
+            case "round_score":
+                $this->roundscore();
+                break;
             case "makequiz":
                 $this->makequiz();
                 break;
@@ -116,6 +119,40 @@ class Controller
         //If answer true, update database accordingly
         //If answer false, update database accordingly
     }
+    public function roundscore() {
+        $error_msg = "";
+        $pin = $_SESSION["pin"];
+
+        $res = $this->db->query("select red_score, blue_score, red_recent_correct, blue_recent_correct from project_runningGame where game_id=?;", "i", $pin);
+        if($res == false) {
+            $error_msg = "<div class='alert alert-danger'>Error getting scores</div>";
+        }
+        $red_score = $res[0]["red_score"];
+        $blue_score = $res[0]["blue_score"];
+        $red_recent = $res[0]["red_recent_correct"];
+        $blue_recent = $res[0]["blue_recent_correct"];
+
+        $res = $this->db->query("select COUNT(username) as num_players from project_player where game_id=? GROUP BY team;", "i", $pin);
+        if($res == false) {
+            $error_msg = "<div class='alert alert-danger'>Error getting scores</div>";
+        }
+        $blue_last = (int)(($blue_recent / $res[0]["num_players"]) * 100);
+        $red_last = (int)(($red_recent / $res[1]["num_players"]) * 100);
+        $red_score += $red_last;
+        $blue_score += $blue_last;
+
+        $res = $this->db->query("update project_runningGame set blue_score = ?, red_score = ? where game_id=?;", 
+                "iii", $blue_score, $red_score, $pin);
+        if($res == false) {
+            $error_msg = "<div class='alert alert-danger'>Error updating scores</div>";
+        }
+        array_shift($_SESSION["questions"]);
+
+
+        include("templates/round_score.php");
+
+    }
+
     public function get_team()
     {
         echo json_encode($_SESSION["team"]);
@@ -238,26 +275,28 @@ class Controller
     }
     public function startgame()
     {
-        $user_game_num =  $this->db->query("select * from project_runningGame where host = ?;", "s", $_SESSION["user"]);
-        if (count($user_game_num) <= 0) {
-            $_SESSION["host"] = true;
-            $pin = rand(10000, 99999);
-            $result =  $this->db->query("select * from project_runningGame where game_id = ?;", "i", $pin);
-            while (count($result) > 0) {
+        if(isset($_SESSION["user"])) {
+            $user_game_num =  $this->db->query("select * from project_runningGame where host = ?;", "s", $_SESSION["user"]);
+            if (count($user_game_num) <= 0) {
+                $_SESSION["host"] = $_SESSION["user"];
                 $pin = rand(10000, 99999);
                 $result =  $this->db->query("select * from project_runningGame where game_id = ?;", "i", $pin);
+                while (count($result) > 0) {
+                    $pin = rand(10000, 99999);
+                    $result =  $this->db->query("select * from project_runningGame where game_id = ?;", "i", $pin);
+                }
+                $insert = $this->db->query(
+                    "insert into project_runningGame (game_id, set_id, host) values (?, ?, ?);",
+                    "iis",
+                    $pin,
+                    $_POST["sid"],
+                    $_SESSION["user"]
+                );
+                $_SESSION["pin"] = $pin;
+                $_SESSION["set_id"] = $_POST["sid"];
             }
-            $insert = $this->db->query(
-                "insert into project_runningGame (game_id, set_id, host) values (?, ?, ?);",
-                "iis",
-                $pin,
-                $_POST["sid"],
-                $_SESSION["user"]
-            );
-            $_SESSION["pin"] = $pin;
-            $_SESSION["set_id"] = $_POST["sid"];
+            $_SESSION["questions"] = $this->db->query("select * from project_question where set_id = ?", "i", $_SESSION["set_id"]);
         }
-        $_SESSION["questions"] = $this->db->query("select * from project_question where set_id = ?", "i", $_SESSION["set_id"]);
         $_SESSION["blue_players"] = $this->db->query("select * from project_player where game_id = ? and team = ?;", "is", $_SESSION["pin"], "0");
         $_SESSION["red_players"] = $this->db->query("select * from project_player where game_id = ? and team = ?;", "is", $_SESSION["pin"], "1");
         include("templates/lobby.php");
