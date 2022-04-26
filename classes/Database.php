@@ -18,11 +18,13 @@ class Database
         $sql3 = file_get_contents('sql/question_setup.sql');
         $sql4 = file_get_contents('sql/runninggame_setup.sql');
         $sql5 = file_get_contents('sql/player_setup.sql');
+        $sql6 = file_get_contents('sql/timeup_setup.sql');
         // $this->mysqli->query($sql1);
         // $this->mysqli->query($sql2);
         // $this->mysqli->query($sql3);
         // $this->mysqli->query($sql4);
         // $this->mysqli->query($sql5);
+        // $this->mysqli->query($sql6);
     }
 
     public function query($query, $bparam = null, ...$params)

@@ -4,7 +4,6 @@ class Controller
     private $command;
 
     private $db;
-    private $time_up = false;
 
     public function __construct($command)
     {
@@ -62,20 +61,27 @@ class Controller
             case "send_answer":
                 $this->send_answer();
                 break;
-            case "logout":
-                $this->logout();
             case "timeup":
                 $this->timeup();
+                break;
+            case "logout":
+                $this->logout();
             default:
                 $this->start();
         }
     }
 
     public function timeup(){
-        if(isset($_GET["timeup"])) {
-            $timeup = $_GET["timeup"];
+        $res = $this->db->query("select timeup from project_timeup where game_id = ?;" ,"i", $_SESSION["pin"]);
+        if(count($res) > 0 && isset($_POST["timeup"])) {
+             $this->db->query("update project_timeup set timeup = ? where game_id = ?;", "si", $_POST["timeup"], $_SESSION["pin"]);
+            echo json_encode("true");
         }
-        return json_encode($timeup);
+        else if(isset($_POST["timeup"])){
+            $this->db->query("insert into project_timeup values(?, ?);", "is", $_SESSION["pin"], $_POST["timeup"]);
+        }
+        else echo json_encode($res[0]["timeup"]);
+        return;
     }
     public function get_players()
     {
@@ -185,6 +191,8 @@ class Controller
     {
         // $test = $this->db->query("select * from project_question where question_id = ?;", "i", 1);
         // print_r($test[0]["correct_answer"]);
+        $this->db->query("update project_timeup set timeup = ? where game_id = ?;", "si", "false", $_SESSION["pin"]);
+
         $question_id = $this->db->query("select * from project_question where set_id = ?;", "i", $_SESSION["set_id"]);
         $curr_q_id = $question_id[0]["question_id"];
         $update = $this->db->query(
@@ -314,6 +322,8 @@ class Controller
         if (!isset($_SESSION["pin"])) {
             header("Location: ?command=");
         }
+        // $this->db->query("select * from project_player where game_id = ? and username = ?;", "is", $_SESSION["pin"], "0");
+
         include("templates/buzzer.php");
     }
     public function start()

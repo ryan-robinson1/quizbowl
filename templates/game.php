@@ -70,14 +70,12 @@
 
         function countdown() {
             if (time < 1) {
-                var ajax = new XMLHttpRequest();
-                ajax.open("GET", "?command=time_up()", true);
-                ajax.send("time_up", "true");
-                window.location.href = "?command=round_score";
+               $.post("?command=timeup", {timeup: true}, function(data) {
+                    console.log(data);
+               }, "json"
+               );
+               window.location.href = "?command=round_score";               
             } else {
-                var ajax = new XMLHttpRequest();
-                ajax.open("GET", "?command=time_up()", true);
-                ajax.send("time_up", "false");
                 document.getElementById("timer").innerHTML = time;
                 time--;
             }
