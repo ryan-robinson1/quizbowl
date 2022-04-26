@@ -80,7 +80,7 @@
 
             });
 
-            $(window).on("unload", function() {
+            $(window).on("beforeunload", function() {
                 new_questions.forEach(function(element) {
                     $.post("index.php?command=add_question", {
                         sid: $("#sid").val(),

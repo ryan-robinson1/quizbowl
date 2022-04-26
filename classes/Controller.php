@@ -102,14 +102,14 @@ class Controller
 
         if ($_POST["team"] === "1" && $_POST["answer"] === $question[0]["correct_answer"]) {
             $update = $this->db->query(
-                "update project_runninggame set red_recent_correct = red_recent_correct+1 where game_id = ?;",
+                "update project_runningGame set red_recent_correct = red_recent_correct+1 where game_id = ?;",
                 "i",
                 $_SESSION["pin"],
             );
         }
         if ($_POST["team"] === "0" && $_POST["answer"] === $question[0]["correct_answer"]) {
             $update = $this->db->query(
-                "update project_runninggame set blue_recent_correct = blue_recent_correct+1 where game_id = ?;",
+                "update project_runningGame set blue_recent_correct = blue_recent_correct+1 where game_id = ?;",
                 "i",
                 $_SESSION["pin"],
             );
@@ -238,7 +238,7 @@ class Controller
         $question_id = $this->db->query("select * from project_question where set_id = ?;", "i", $_SESSION["set_id"]);
         $curr_q_id = $question_id[0]["question_id"];
         $update = $this->db->query(
-            "update project_runninggame set current_question = ? where game_id = ?;",
+            "update project_runningGame set current_question = ? where game_id = ?;",
             "ii",
             $curr_q_id,
             $_SESSION["pin"],
