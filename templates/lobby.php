@@ -79,7 +79,7 @@
          </div>
       </div>
    </div>
-   <?php if (isset($_SESSION["user"]) && isset($_SESSION["host"]) &&  $_SESSION["host"] == $_SESSION["user"]) : ?>
+   <?php if (isset($_SESSION["username"]) && isset($_SESSION["host"]) &&  $_SESSION["host"] == $_SESSION["username"]) : ?>
       <div class="container">
          <div class="row p-5">
             <form action="?command=in_session" method="post">
