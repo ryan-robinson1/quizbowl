@@ -78,13 +78,10 @@ class Controller
     }
     public function send_answer()
     {
-
-
         $question_id = $this->db->query("select * from project_runningGame where game_id = ?;", "i", $_SESSION["pin"]);
         $question = $this->db->query("select * from project_question where question_id = ?;", "i", 1);
 
 
-        // if ($question[0]["correct_answer"] === $answer && $team === "1") {
         if ($_POST["team"] === "1" && $_POST["answer"] === $question[0]["correct_answer"]) {
             $update = $this->db->query(
                 "update project_runninggame set red_recent_correct = red_recent_correct+1 where game_id = ?;",

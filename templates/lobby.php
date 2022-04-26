@@ -28,11 +28,11 @@
          </ul>
 
          <div class="btn-group">
-            <?php if(isset($_SESSION["user"])): ?>
+            <?php if (isset($_SESSION["user"])) : ?>
                <button type="button" class="btn btn-secondary bg-purple dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="profile-btn">
                   <?= $_SESSION["user"] ?>
                </button>
-               <?php endif; ?>
+            <?php endif; ?>
             <ul class="dropdown-menu dropdown-menu-end">
                <li><a class="dropdown-item" href="?command=logout">Log Out</a></li>
             </ul>
@@ -79,22 +79,23 @@
          </div>
       </div>
    </div>
-   <?php if(isset($_SESSION["user"]) && isset($_SESSION["host"]) &&  $_SESSION["host"]==$_SESSION["user"]): ?>
-   <div class="container">
-      <div class="row p-5">
-         <form action="?command=in_session" method="post">
-            <div class="text-center">
-               <button type="submit" class="btn btn-success" style="font-size:40px"><span>Begin!</span></button>
-            </div>
-         </form>
+   <?php if (isset($_SESSION["user"]) && isset($_SESSION["host"]) &&  $_SESSION["host"] == $_SESSION["user"]) : ?>
+      <div class="container">
+         <div class="row p-5">
+            <form action="?command=in_session" method="post">
+               <div class="text-center">
+                  <button type="submit" class="btn btn-success" style="font-size:40px"><span>Begin!</span></button>
+               </div>
+            </form>
 
+         </div>
       </div>
-   </div>
    <?php endif; ?>
 
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
    <script type="text/javascript">
       var players = null;
+
       var red = [];
       var blue = [];
       getPlayers();
@@ -135,9 +136,12 @@
          }
 
       }
+
+
+
       window.setInterval(function() {
-         getPlayers();
-      }, 2000);
+         countdown();
+      }, 1000);
    </script>
 </body>
 
