@@ -74,8 +74,9 @@ class Controller
         }
     }
 
-    public function timeup(){
-        if(isset($_GET["timeup"])) {
+    public function timeup()
+    {
+        if (isset($_GET["timeup"])) {
             $timeup = $_GET["timeup"];
         }
         return json_encode($timeup);
@@ -180,24 +181,16 @@ class Controller
         $red_score += $red_last;
         $blue_score += $blue_last;
 
-<<<<<<< HEAD
-
-
-
-
         $res = $this->db->query(
-            "update project_runningGame set blue_score = ?, red_score = ? where game_id=?;",
-            "iii",
+            "update project_runningGame set blue_score = ?, red_score = ?, blue_recent_correct = ?, red_recent_correct = ? where game_id=?;",
+            "iiiii",
             $blue_score,
             $red_score,
+            0,
+            0,
             $pin
         );
         if ($res == false) {
-=======
-        $res = $this->db->query("update project_runningGame set blue_score = ?, red_score = ?, blue_recent_correct = ?, red_recent_correct = ? where game_id=?;", 
-                "iiiii", $blue_score, $red_score,0, 0, $pin);
-        if($res == false) {
->>>>>>> ffb8baf1a9498e984dbbd11dee8af7dbdf4ca204
             $error_msg = "<div class='alert alert-danger'>Error updating scores</div>";
         }
 
