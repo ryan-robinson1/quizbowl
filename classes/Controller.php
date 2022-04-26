@@ -4,6 +4,7 @@ class Controller
     private $command;
 
     private $db;
+    private $time_up = false;
 
     public function __construct($command)
     {
@@ -66,9 +67,18 @@ class Controller
                 break;
             case "logout":
                 $this->logout();
+            case "timeup":
+                $this->timeup();
             default:
                 $this->start();
         }
+    }
+
+    public function timeup(){
+        if(isset($_GET["timeup"])) {
+            $timeup = $_GET["timeup"];
+        }
+        return json_encode($timeup);
     }
     public function get_players()
     {
@@ -170,6 +180,7 @@ class Controller
         $red_score += $red_last;
         $blue_score += $blue_last;
 
+<<<<<<< HEAD
 
 
 
@@ -182,8 +193,14 @@ class Controller
             $pin
         );
         if ($res == false) {
+=======
+        $res = $this->db->query("update project_runningGame set blue_score = ?, red_score = ?, blue_recent_correct = ?, red_recent_correct = ? where game_id=?;", 
+                "iiiii", $blue_score, $red_score,0, 0, $pin);
+        if($res == false) {
+>>>>>>> ffb8baf1a9498e984dbbd11dee8af7dbdf4ca204
             $error_msg = "<div class='alert alert-danger'>Error updating scores</div>";
         }
+
         array_shift($_SESSION["questions"]);
 
 
