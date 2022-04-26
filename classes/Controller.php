@@ -55,6 +55,9 @@ class Controller
             case "get_players":
                 $this->get_players();
                 break;
+            case "end_game":
+                $this->end_game();
+                break;
             case "get_team":
                 $this->get_team();
                 break;
@@ -132,12 +135,41 @@ class Controller
         //If answer true, update database accordingly
         //If answer false, update database accordingly
     }
-    public function roundscore() {
+    public function end_game()
+    {
+        $pin = $_SESSION["pin"];
+
+        $res = $this->db->query("select red_score, blue_score, red_recent_correct, blue_recent_correct from project_runningGame where game_id=?;", "i", $pin);
+        if ($res == false) {
+            $error_msg = "<div class='alert alert-danger'>Error getting scores</div>";
+        }
+        $red_score = $res[0]["red_score"];
+        $blue_score = $res[0]["blue_score"];
+
+        $red_text = "Tie";
+        $blue_text = "Tie";
+
+        if ($red_score > $blue_score) {
+            $red_text = "Winner";
+            $blue_text = "Loser";
+        } else if ($red_score < $blue_score) {
+            $blue_text = "Winner";
+            $red_text = "Loser";
+        }
+        if (isset($_SESSION["pin"]))
+            $this->db->query("delete from project_player where game_id=?;", "s", $_SESSION["pin"]);
+
+        if (isset($_SESSION["username"]))
+            $this->db->query("delete from project_runningGame where host=?;", "s", $_SESSION["username"]);
+        include("templates/end_game.php");
+    }
+    public function roundscore()
+    {
         $error_msg = "";
         $pin = $_SESSION["pin"];
 
         $res = $this->db->query("select red_score, blue_score, red_recent_correct, blue_recent_correct from project_runningGame where game_id=?;", "i", $pin);
-        if($res == false) {
+        if ($res == false) {
             $error_msg = "<div class='alert alert-danger'>Error getting scores</div>";
         }
         $red_score = $res[0]["red_score"];
@@ -146,7 +178,7 @@ class Controller
         $blue_recent = $res[0]["blue_recent_correct"];
 
         $res = $this->db->query("select COUNT(username) as num_players from project_player where game_id=? GROUP BY team;", "i", $pin);
-        if($res == false) {
+        if ($res == false) {
             $error_msg = "<div class='alert alert-danger'>Error getting scores</div>";
         }
         $blue_last = (int)(($blue_recent / $res[0]["num_players"]) * 100);
@@ -154,9 +186,16 @@ class Controller
         $red_score += $red_last;
         $blue_score += $blue_last;
 
-        $res = $this->db->query("update project_runningGame set blue_score = ?, red_score = ?, blue_recent_correct = ?, red_recent_correct = ? where game_id=?;", 
-                "iiiii", $blue_score, $red_score,0, 0, $pin);
-        if($res == false) {
+        $res = $this->db->query(
+            "update project_runningGame set blue_score = ?, red_score = ?, blue_recent_correct = ?, red_recent_correct = ? where game_id=?;",
+            "iiiii",
+            $blue_score,
+            $red_score,
+            0,
+            0,
+            $pin
+        );
+        if ($res == false) {
             $error_msg = "<div class='alert alert-danger'>Error updating scores</div>";
         }
 
@@ -164,7 +203,6 @@ class Controller
 
 
         include("templates/round_score.php");
-
     }
 
     public function get_team()
@@ -176,13 +214,15 @@ class Controller
         if (isset($_SESSION["pin"]))
             $this->db->query("delete from project_player where game_id=?;", "s", $_SESSION["pin"]);
 
-        if (isset($_SESSION["user"]))
-            $this->db->query("delete from project_runningGame where host=?;", "s", $_SESSION["user"]);
+        if (isset($_SESSION["username"]))
+            $this->db->query("delete from project_runningGame where host=?;", "s", $_SESSION["username"]);
         session_unset();
         session_destroy();
     }
     public function logout_player()
     {
+        if (isset($_SESSION["pin"]))
+            $this->db->query("delete from project_player where game_id=?;", "s", $_SESSION["pin"]);
         session_unset();
         session_destroy();
         $this->start();
@@ -203,7 +243,7 @@ class Controller
         );
         //TODO: We need to pop off a question from the question session array when we are done with it
         if (count($_SESSION["questions"]) < 1) {
-            //TODO: Transition to end game screen
+            header("Location: ?command=end_game");
         }
         $question = $_SESSION["questions"][0];
         $pin = $_SESSION["pin"];
@@ -220,7 +260,7 @@ class Controller
         }
 
         // gets all sets for the user
-        $sets_list = $this->db->query("select set_id, set_name from project_questionSet where username = ?;", "s", $_SESSION["user"]);
+        $sets_list = $this->db->query("select set_id, set_name from project_questionSet where username = ?;", "s", $_SESSION["username"]);
 
         if ($sets_list === false) {
             $error_msg = "<div class='alert alert-danger'>Error getting question sets</div>";
@@ -255,7 +295,7 @@ class Controller
 
         if ($set_name_created) {
             if (isset($_POST["set_name"])) {
-                $res = $this->db->query("insert into project_questionSet(set_name, username) values (?, ?)", "ss", $_POST["set_name"], $_SESSION["user"]);
+                $res = $this->db->query("insert into project_questionSet(set_name, username) values (?, ?)", "ss", $_POST["set_name"], $_SESSION["username"]);
                 if ($res === false) {
                     $error_msg = "<div class='alert alert-danger'>Error inserting new set</div>";
                     include("templates/new_set.php");
@@ -291,10 +331,10 @@ class Controller
     }
     public function startgame()
     {
-        if(isset($_SESSION["user"])) {
-            $user_game_num =  $this->db->query("select * from project_runningGame where host = ?;", "s", $_SESSION["user"]);
+        if (isset($_SESSION["username"])) {
+            $user_game_num =  $this->db->query("select * from project_runningGame where host = ?;", "s", $_SESSION["username"]);
             if (count($user_game_num) <= 0) {
-                $_SESSION["host"] = $_SESSION["user"];
+                $_SESSION["host"] = $_SESSION["username"];
                 $pin = rand(10000, 99999);
                 $result =  $this->db->query("select * from project_runningGame where game_id = ?;", "i", $pin);
                 while (count($result) > 0) {
@@ -306,7 +346,7 @@ class Controller
                     "iis",
                     $pin,
                     $_POST["sid"],
-                    $_SESSION["user"]
+                    $_SESSION["username"]
                 );
                 $_SESSION["pin"] = $pin;
                 $_SESSION["set_id"] = $_POST["sid"];
@@ -441,7 +481,7 @@ class Controller
                 $error_msg = "Error checking for user";
             } else if (!empty($data)) {
                 if (password_verify($_POST["password"], $data[0]["password"])) {
-                    $_SESSION["user"] = $_POST["user"];
+                    $_SESSION["username"] = $_POST["user"];
                     header("Location: ?command=quizzes");
                 } else {
                     $error_msg = "Wrong password";
@@ -457,7 +497,7 @@ class Controller
                 if ($insert === false) {
                     $error_msg = "Error inserting user";
                 } else {
-                    $_SESSION["user"] = $_POST["user"];
+                    $_SESSION["username"] = $_POST["user"];
                     header("Location: ?command=quizzes");
                 }
             }
