@@ -70,12 +70,9 @@
 
         function countdown() {
             if (time < 1) {
-<<<<<<< HEAD
-=======
                 var ajax = new XMLHttpRequest();
                 ajax.open("GET", "?command=time_up()", true);
                 ajax.send("time_up", "true");
->>>>>>> ffb8baf1a9498e984dbbd11dee8af7dbdf4ca204
                 window.location.href = "?command=round_score";
             } else {
                 var ajax = new XMLHttpRequest();
