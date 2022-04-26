@@ -55,11 +55,11 @@
             <hr>
             <div class="col-12">
                 <div class="col-6" id="team">
-                    <h2>Blue Team</h2>
+                    <h2><?= $team ?></h2>
                 </div>
-                <div class="col-6" id="score">
-                    <h2 style="float: right; padding-right: 20px;">750</h2>
-                </div>
+                <!-- <div class="col-6" id="score">
+                    <h2 style="float: right; padding-right: 20px;"><?= $score ?></h2>
+                </div> -->
 
             </div>
         </div>
@@ -112,23 +112,21 @@
 
     function gettimeup() {
         $.post("?command=timeup", {}, function(data) {
-                    console.log(data);
-                    if(data == "true") {
-                        document.getElementById("btn").disabled = false;
-                        document.getElementById("btn2").disabled = false;
-                        document.getElementById("btn3").disabled = false;
-                        document.getElementById("btn4").disabled = false;
-                    }
-               }, "json"
-               );
+            console.log(data);
+            if (data == "true") {
+                document.getElementById("btn").disabled = false;
+                document.getElementById("btn2").disabled = false;
+                document.getElementById("btn3").disabled = false;
+                document.getElementById("btn4").disabled = false;
+            }
+        }, "json");
     }
 
     window.setInterval(function() {
-            gettimeup();
-        }, 1000);
+        gettimeup();
+    }, 1000);
 
     getTeam();
-
 </script>
 
 </html>

@@ -74,16 +74,15 @@ class Controller
         }
     }
 
-    public function timeup(){
-        $res = $this->db->query("select timeup from project_timeup where game_id = ?;" ,"i", $_SESSION["pin"]);
-        if(count($res) > 0 && isset($_POST["timeup"])) {
-             $this->db->query("update project_timeup set timeup = ? where game_id = ?;", "si", $_POST["timeup"], $_SESSION["pin"]);
+    public function timeup()
+    {
+        $res = $this->db->query("select timeup from project_timeup where game_id = ?;", "i", $_SESSION["pin"]);
+        if (count($res) > 0 && isset($_POST["timeup"])) {
+            $this->db->query("update project_timeup set timeup = ? where game_id = ?;", "si", $_POST["timeup"], $_SESSION["pin"]);
             echo json_encode("true");
-        }
-        else if(isset($_POST["timeup"])){
+        } else if (isset($_POST["timeup"])) {
             $this->db->query("insert into project_timeup values(?, ?);", "is", $_SESSION["pin"], $_POST["timeup"]);
-        }
-        else echo json_encode($res[0]["timeup"]);
+        } else echo json_encode($res[0]["timeup"]);
         return;
     }
     public function get_players()
@@ -159,7 +158,7 @@ class Controller
 
         if (isset($_SESSION["pin"]))
             $this->db->query("delete from project_player where game_id=?;", "s", $_SESSION["pin"]);
-        
+
         $this->db->query("delete from project_timeup where game_id=?;", "s", $_SESSION["pin"]);
 
         if (isset($_SESSION["username"]))
@@ -366,6 +365,18 @@ class Controller
             header("Location: ?command=");
         }
         // $this->db->query("select * from project_player where game_id = ? and username = ?;", "is", $_SESSION["pin"], "0");
+        $team = "";
+
+        $result =  $this->db->query("select * from project_runningGame where game_id = ?;", "i",  $_SESSION["pin"]);
+        $score = "";
+
+        if ($_SESSION["team"] === "0") {
+            $team = "Blue Team";
+            $score = $result[0]["blue_score"];
+        } else {
+            $team = "Red Team";
+            $score = $result[0]["red_score"];
+        }
 
         include("templates/buzzer.php");
     }
