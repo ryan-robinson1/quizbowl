@@ -69,6 +69,7 @@
 </body>
 <script type="text/javascript">
     var team = "0";
+    var time = 20;
 
     function getTeam() {
         var ajax = new XMLHttpRequest();
@@ -109,6 +110,7 @@
 
 
     };
+
     getTeam();
 </script>
 

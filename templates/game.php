@@ -21,7 +21,8 @@
 
 
         <h2 style="display: inline-block;">PIN: <?= $pin ?></h2>
-        <h2 style=" float:right; padding-right:20px">TIME: 20</h2>
+        <h2 style=" float:right; padding-right:20px">TIME: <div style="display: inline-block;" id="timer">20</div>
+        </h2>
         <hr>
         <h3 style="text-align:center; padding-top:36px; font-size:35px;"><?= $question["question"] ?></h3>
         <div class="row" style="text-align:center; margin-top: 200px">
@@ -63,8 +64,23 @@
 
     </header>
 
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        var time = 19;
+
+        function countdown() {
+            if (time < 1) {
+                //TODO redirect to results page
+            } else {
+                document.getElementById("timer").innerHTML = time;
+                time--;
+            }
+
+        }
+        window.setInterval(function() {
+            countdown();
+        }, 1000);
+    </script>
 </body>
 
 </html>
