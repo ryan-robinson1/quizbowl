@@ -37,7 +37,7 @@
         <div class="col-12">
             <div class="col-6">
                 <div class="button_padding">
-                    <button class="btn btn-warning" style="background-color: #ffa602 !important;" onclick='sendAnswer("3")' id="btn3">C</button>
+                    <button class="btn btn-primary" style="background-color: #ffa602 !important;" onclick='sendAnswer("3")' id="btn3">C</button>
                 </div>
             </div>
             <div class="col-6">
@@ -69,7 +69,7 @@
 </body>
 <script type="text/javascript">
     var team = "0";
-    var time = 20;
+
 
     function getTeam() {
         var ajax = new XMLHttpRequest();

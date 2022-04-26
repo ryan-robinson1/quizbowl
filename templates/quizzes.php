@@ -12,13 +12,12 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="css/sets.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.js"
-                integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
-                crossorigin="anonymous">
-        </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous">
+    </script>
     <script type="text/javascript">
         new_questions = [];
         id = 0;
+
         function Question(qid, question, num, answer1, answer2, answer3, answer4, correct) {
             this.id = qid;
             this.question = question;
@@ -40,30 +39,29 @@
                 var a4 = $("#a4").val();
                 var qn = $("#qnum").val();
                 var c = $("input[name='correct_answer']:checked").val() // from https://stackoverflow.com/questions/596351/how-can-i-know-which-radio-button-is-selected-via-jquery
-                if(q == "" || a1 == "" || a2 == "" || a3 == "" || a4 == "" || qnum == "" || qn == "" || c === undefined) {
+                if (q == "" || a1 == "" || a2 == "" || a3 == "" || a4 == "" || qnum == "" || qn == "" || c === undefined) {
                     $("#newq_alert").show();
-                }
-                else {
+                } else {
                     $("#newq_alert").hide();
                     var newq = new Question(id, q, qn, a1, a2, a3, a4, c);
                     new_questions.push(newq);
 
                     var qlist = $("#list_of_questions");
-                    $("<li class='list-group-item py-0 border-0' id='lid" + id + "'><div class='container'><div class='row'><div class='card col-md-2 p-0 border-0'><div class='card-body p-5 border border-3 rounded'><a class='btn btn-lg btn-danger' type='button' id='newq_delete" + id + "'>Delete</a></div></div><div class='card col-md-5 p-0 border-0'><div class='card-body p-5 border border-3 rounded'><ul class='list-group list-group-flush'><li class='list-group-item' id='newq_question" + id + "'> </li></ul></div></div><div class='card col-md-5 p-0 border-0'><div class='card-body p-5 border border-3 rounded'><ul class='list-group list-group-flush'><li class='list-group-item'><ul><li id='newq_a1" + id +"'></li><li id='newq_a2"+ id +"'></li><li id='newq_a3"+ id +"'></li><li id='newq_a4"+ id +"'> </li></ul></li></ul></div></div></div></div></li>")
-                    .insertBefore("#newq_form");
+                    $("<li class='list-group-item py-0 border-0' id='lid" + id + "'><div class='container'><div class='row'><div class='card col-md-2 p-0 border-0'><div class='card-body p-5 border border-3 rounded'><a class='btn btn-lg btn-danger' type='button' id='newq_delete" + id + "'>Delete</a></div></div><div class='card col-md-5 p-0 border-0'><div class='card-body p-5 border border-3 rounded'><ul class='list-group list-group-flush'><li class='list-group-item' id='newq_question" + id + "'> </li></ul></div></div><div class='card col-md-5 p-0 border-0'><div class='card-body p-5 border border-3 rounded'><ul class='list-group list-group-flush'><li class='list-group-item'><ul><li id='newq_a1" + id + "'></li><li id='newq_a2" + id + "'></li><li id='newq_a3" + id + "'></li><li id='newq_a4" + id + "'> </li></ul></li></ul></div></div></div></div></li>")
+                        .insertBefore("#newq_form");
 
                     $("#newq_question" + id).text(q);
                     $("#newq_a1" + id).text(a1);
                     $("#newq_a2" + id).text(a2);
                     $("#newq_a3" + id).text(a3);
                     $("#newq_a4" + id).text(a4);
-                    $("#newq_a" + c + "" + id + "").css("font-weight","Bold");
+                    $("#newq_a" + c + "" + id + "").css("font-weight", "Bold");
 
                     $("#newq_delete" + id).click(function() {
                         var qid = $(this).attr('id').substring(11);
                         new_questions.forEach(function(element, index) {
-                            if(element.id == qid) {
-                                new_questions.splice(index, 1); 
+                            if (element.id == qid) {
+                                new_questions.splice(index, 1);
                             }
                         });
                         $("#lid" + qid).remove();
@@ -84,8 +82,7 @@
 
             $(window).on("unload", function() {
                 new_questions.forEach(function(element) {
-                    $.post("index.php?command=add_question", 
-                    { 
+                    $.post("index.php?command=add_question", {
                         sid: $("#sid").val(),
                         question: element.question,
                         qnum: element.num,
@@ -96,8 +93,7 @@
                         correct_answer: element.correct
                     }, function(data) {
                         console.log(data);
-                    }, "text"
-                    );
+                    }, "text");
                 });
             });
         });
@@ -112,7 +108,7 @@
 
             <div class="btn-group">
                 <button type="button" class="btn btn-secondary bg-purple dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="profile-btn">
-                    <?= $_SESSION["user"] ?>
+                    <?= $_SESSION["username"] ?>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="?command=logout">Log Out</a></li>
@@ -129,22 +125,22 @@
     <?php echo $error_msg; ?>
 
     <div class="container text-center">
-            <form action="?command=startgame" method="post" style="display: inline;">
-                <button type="submit" class="btn btn-lg btn-success">Host Quiz!</button>
-                <input type="hidden" id="sid" name="sid" value ="<?php if(isset($_GET["sid"])) echo $_GET["sid"]; else echo "-1";?>">
-            </form>
+        <form action="?command=startgame" method="post" style="display: inline;">
+            <button type="submit" class="btn btn-lg btn-success">Host Quiz!</button>
+            <input type="hidden" id="sid" name="sid" value="<?php if (isset($_GET["sid"])) echo $_GET["sid"];
+                                                            else echo "-1"; ?>">
+        </form>
     </div>
     <div class="container">
         <div class="dropdown p-4 text-center">
-            
+
             <button class="btn btn-lg btn-secondary bg-purple dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                <?php if(isset($_GET["sid"])) {
-                        foreach($sets_list as $set) {
-                            if($set["set_id"] == $_GET["sid"])
+                <?php if (isset($_GET["sid"])) {
+                    foreach ($sets_list as $set) {
+                        if ($set["set_id"] == $_GET["sid"])
                             echo $set["set_name"];
-                        }
                     }
-                    else echo "Select set"; 
+                } else echo "Select set";
                 ?>
             </button>
 
@@ -159,7 +155,8 @@
                 <button class="btn btn-lg btn-danger" type="submit">
                     Delete Question Set!
                 </button>
-                <input type="hidden" id = "sid" name = "sid" value="<?php if(isset($_GET["sid"])) echo $_GET["sid"]; else echo "-1";?>">
+                <input type="hidden" id="sid" name="sid" value="<?php if (isset($_GET["sid"])) echo $_GET["sid"];
+                                                                else echo "-1"; ?>">
             </form>
             <form action="?command=makequiz" method="post" style="display: inline;">
                 <button class="btn btn-lg btn-secondary" type="submit">
@@ -169,7 +166,7 @@
         </div>
     </div>
 
-    <ul class="list-group" id = "list_of_questions">
+    <ul class="list-group" id="list_of_questions">
         <li class="list-group-item py-0 border-0">
             <div class="container">
                 <div class="row">
@@ -212,7 +209,8 @@
                         <div class="row">
                             <div class="card col-md-2 p-0 border-0">
                                 <div class="card-body p-5 border border-3 rounded">
-                                    <a class="btn btn-lg btn-danger" type="button" href="?command=delete_question&qid=<?php echo $question["question_id"];?>&sid=<?php if(isset($_GET["sid"])) echo $_GET["sid"]; else echo "-1";?>">
+                                    <a class="btn btn-lg btn-danger" type="button" href="?command=delete_question&qid=<?php echo $question["question_id"]; ?>&sid=<?php if (isset($_GET["sid"])) echo $_GET["sid"];
+                                                                                                                                                                    else echo "-1"; ?>">
                                         Delete
                                     </a>
                                 </div>
@@ -268,15 +266,15 @@
 
         <?php endforeach;
         } ?>
-        <?php if(isset($_GET["sid"])): ?>
-        <li class="list-group-item py-0 border-0" id="newq_form">
-            <div class="container">
+        <?php if (isset($_GET["sid"])) : ?>
+            <li class="list-group-item py-0 border-0" id="newq_form">
+                <div class="container">
                     <div class="row">
                         <div class="card col-md-2 p-0 border-0">
                             <div class="card-body p-5 border border-3 rounded">
                                 <button class="btn btn-lg btn-primary" id="newq">
-                                     Add question
-                                </button>  
+                                    Add question
+                                </button>
                                 <div class='alert alert-danger' id="newq_alert">Error: Fill out all fields</div>
                             </div>
                         </div>
@@ -299,34 +297,34 @@
                                             <li>
                                                 <div class="col">
                                                     <textarea class="form-control" name="answer1" id="a1" rows=1 placeholder="Type answer option here" required></textarea>
-                                                <div>
-                                                <div class="col">
-                                                    <input class="form-check-input" type="radio" name="correct_answer" value="1" required>
-                                                </div>                     
+                                                    <div>
+                                                        <div class="col">
+                                                            <input class="form-check-input" type="radio" name="correct_answer" value="1" required>
+                                                        </div>
                                             </li>
                                             <li>
                                                 <div class="col">
                                                     <textarea class="form-control" name="answer2" id="a2" rows=1 placeholder="Type answer option here" required></textarea>
-                                                <div>
-                                                <div class="col">
-                                                    <input class="form-check-input" type="radio" name="correct_answer" value="2" >
-                                                </div>  
+                                                    <div>
+                                                        <div class="col">
+                                                            <input class="form-check-input" type="radio" name="correct_answer" value="2">
+                                                        </div>
                                             </li>
                                             <li>
                                                 <div class="col">
                                                     <textarea class="form-control" name="answer3" id="a3" rows=1 placeholder="Type answer option here" required></textarea>
-                                                <div>
-                                                <div class="col">
-                                                    <input class="form-check-input" type="radio" name="correct_answer" value="3">
-                                                </div>   
+                                                    <div>
+                                                        <div class="col">
+                                                            <input class="form-check-input" type="radio" name="correct_answer" value="3">
+                                                        </div>
                                             </li>
-                                            <li> 
+                                            <li>
                                                 <div class="col">
                                                     <textarea class="form-control" name="answer4" id="a4" rows=1 placeholder="Type answer option here" required></textarea>
-                                                <div>
-                                                <div class="col">
-                                                    <input class="form-check-input" type="radio" name="correct_answer" value="4">
-                                                </div>  
+                                                    <div>
+                                                        <div class="col">
+                                                            <input class="form-check-input" type="radio" name="correct_answer" value="4">
+                                                        </div>
                                             </li>
                                         </ul>
                                     </li>
@@ -334,8 +332,8 @@
                             </div>
                         </div>
                     </div>
-            </div>
-        </li>
+                </div>
+            </li>
         <?php endif; ?>
     </ul>
     <!--for spacing at bottom of screen-->

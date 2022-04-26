@@ -70,7 +70,7 @@
 
         function countdown() {
             if (time < 1) {
-                //TODO redirect to results page
+                window.location.href = "?command=round_score";
             } else {
                 document.getElementById("timer").innerHTML = time;
                 time--;
