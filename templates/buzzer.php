@@ -108,10 +108,30 @@
             dataType: "text"
         });
 
-
     };
+    function gettimeup() {
+        var ajax = new XMLHttpRequest();
+        ajax.open("GET", "?command=timeup()", true);
+        ajax.responseType = "json";
+        ajax.send(null);
+        ajax.addEventListener("load", function() {
+            if (this.status == 200) { // worked 
+                var res = JSON.parse(JSON.stringify(this.response));
+                console.log(res);
+                if(res == false) {  
+                    document.getElementById("btn").disabled = false;
+                    document.getElementById("btn2").disabled = false;
+                    document.getElementById("btn3").disabled = false;
+                    document.getElementById("btn4").disabled = false;
+                }
+            }
+        });
+    }
 
     getTeam();
+    window.setInterval(function() {
+            checktimeup();
+        }, 1000);
 </script>
 
 </html>

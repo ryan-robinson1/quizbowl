@@ -70,12 +70,17 @@
 
         function countdown() {
             if (time < 1) {
-                //TODO redirect to results page
+                var ajax = new XMLHttpRequest();
+                ajax.open("GET", "?command=time_up()", true);
+                ajax.send("time_up", "true");
+                window.location.href = "?command=round_score";
             } else {
+                var ajax = new XMLHttpRequest();
+                ajax.open("GET", "?command=time_up()", true);
+                ajax.send("time_up", "false");
                 document.getElementById("timer").innerHTML = time;
                 time--;
             }
-
         }
         window.setInterval(function() {
             countdown();
