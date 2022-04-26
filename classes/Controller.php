@@ -52,6 +52,12 @@ class Controller
             case "get_players":
                 $this->get_players();
                 break;
+            case "get_team":
+                $this->get_team();
+                break;
+            case "send_answer":
+                $this->send_answer();
+                break;
             case "logout":
                 $this->logout();
             default:
@@ -66,6 +72,53 @@ class Controller
             $_SESSION["blue_players"],
             $_SESSION["red_players"],
         ));
+    }
+    public function send_answer()
+    {
+
+
+        $question_id = $this->db->query("select * from project_runningGame where game_id = ?;", "i", $_SESSION["pin"]);
+        $question = $this->db->query("select * from project_question where question_id = ?;", "i", 1);
+
+
+        // if ($question[0]["correct_answer"] === $answer && $team === "1") {
+        if ($_POST["team"] === "1" && $_POST["answer"] === $question[0]["correct_answer"]) {
+            $update = $this->db->query(
+                "update project_runninggame set red_recent_correct = red_recent_correct+1 where game_id = ?;",
+                "i",
+                $_SESSION["pin"],
+            );
+        }
+        if ($_POST["team"] === "0" && $_POST["answer"] === $question[0]["correct_answer"]) {
+            $update = $this->db->query(
+                "update project_runninggame set blue_recent_correct = blue_recent_correct+1 where game_id = ?;",
+                "i",
+                $_SESSION["pin"],
+            );
+        }
+
+        // }
+
+        // if ($question["correct_answer"] === $answer and $team === "0") {
+        //     $update = $this->db->query(
+        //         "update project_runninggame set blue_recent_correct = blue_recent_correct+1 where game_id = ?;",
+        //         "i",
+        //         $_SESSION["pin"],
+        //     );
+        // } else if ($question["correct_answer"] === $answer and $team === "1") {
+        //     $update = $this->db->query(
+        //         "update project_runninggame set red_recent_correct = red_recent_correct+1 where game_id = ?;",
+        //         "i",
+        //         $_SESSION["pin"],
+        //     );
+        // }
+
+        //If answer true, update database accordingly
+        //If answer false, update database accordingly
+    }
+    public function get_team()
+    {
+        echo json_encode($_SESSION["team"]);
     }
     public function logout()
     {
@@ -85,14 +138,22 @@ class Controller
     }
     public function in_session()
     {
+        // $test = $this->db->query("select * from project_question where question_id = ?;", "i", 1);
+        // print_r($test[0]["correct_answer"]);
+        $question_id = $this->db->query("select * from project_question where set_id = ?;", "i", $_SESSION["set_id"]);
+        $curr_q_id = $question_id[0]["question_id"];
+        $update = $this->db->query(
+            "update project_runninggame set current_question = ? where game_id = ?;",
+            "ii",
+            $curr_q_id,
+            $_SESSION["pin"],
+        );
         //TODO: We need to pop off a question from the question session array when we are done with it
         if (count($_SESSION["questions"]) < 1) {
             //TODO: Transition to end game screen
         }
         $question = $_SESSION["questions"][0];
         $pin = $_SESSION["pin"];
-
-
 
         include("templates/game.php");
     }
@@ -196,7 +257,7 @@ class Controller
             $_SESSION["pin"] = $pin;
             $_SESSION["set_id"] = $_POST["sid"];
         }
-        $_SESSION["questions"] = $this->db->query("select * from project_question where set_id = ?", "i", 1);
+        $_SESSION["questions"] = $this->db->query("select * from project_question where set_id = ?", "i", $_SESSION["set_id"]);
         $_SESSION["blue_players"] = $this->db->query("select * from project_player where game_id = ? and team = ?;", "is", $_SESSION["pin"], "0");
         $_SESSION["red_players"] = $this->db->query("select * from project_player where game_id = ? and team = ?;", "is", $_SESSION["pin"], "1");
         include("templates/lobby.php");
@@ -223,17 +284,20 @@ class Controller
             } else {
                 $_SESSION["pin"] = $_POST["pin"];
                 $teams = "01";
+                $team = $teams[rand() % 2];
+                $_SESSION["team"] = $team;
+                $_SESSION["user"] =  $_POST["name"];
                 $insert = $this->db->query(
                     "insert into project_player (username, game_id, team) values (?, ?, ?);",
                     "sis",
                     $_POST["name"],
                     $_POST["pin"],
-                    $teams[rand() % 2]
+                    $team
                 );
                 if ($insert === false) {
                     $error_msg = "Duplicate user";
                 } else {
-                    header("Location: ?command=startgame");
+                    header("Location: ?command=playgame");
                 }
             }
         }
