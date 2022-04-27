@@ -96,18 +96,19 @@ class Controller
     }
     public function send_answer()
     {
-        $question_id = $this->db->query("select * from project_runningGame where game_id = ?;", "i", $_SESSION["pin"]);
-        $question = $this->db->query("select * from project_question where question_id = ?;", "i", 1);
+        //$question_id = $this->db->query("select * from project_runningGame where game_id = ?;", "i", $_SESSION["pin"]);
+        //$question = $this->db->query("select * from project_question where question_id = ?;", "i", 1);
 
-
-        if ($_POST["team"] === "1" && $_POST["answer"] === $question[0]["correct_answer"]) {
+        //$_SESSION["questions"][0]
+        //$question[0]["correct_answer"]
+        if ($_POST["team"] === "1" && $_POST["answer"] === $_SESSION["questions"][0]["correct_answer"]) {
             $update = $this->db->query(
                 "update project_runningGame set red_recent_correct = red_recent_correct+1 where game_id = ?;",
                 "i",
                 $_SESSION["pin"],
             );
         }
-        if ($_POST["team"] === "0" && $_POST["answer"] === $question[0]["correct_answer"]) {
+        if ($_POST["team"] === "0" && $_POST["answer"] === $_SESSION["questions"][0]["correct_answer"]) {
             $update = $this->db->query(
                 "update project_runningGame set blue_recent_correct = blue_recent_correct+1 where game_id = ?;",
                 "i",
